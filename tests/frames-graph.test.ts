@@ -49,4 +49,15 @@ describe('buildGraphFrame', () => {
     expect(f.edges.find((e) => e.id === 'b>c')!.highlighted).toBe(true);
     expect(buildGraphFrame(s, 99, 0, false).caption).toBe('last');
   });
+
+  it('passes a node icon through to the frame', () => {
+    const s: GraphScene = {
+      ...scene,
+      nodes: [{ ...scene.nodes[0], icon: 'server' }, ...scene.nodes.slice(1)],
+    };
+    const f = buildGraphFrame(s, 0, 0, false);
+    expect(node(f, 'a').icon).toBe('server');
+    expect(node(f, 'b').icon).toBeUndefined();
+  });
 });
+

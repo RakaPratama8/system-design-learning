@@ -50,4 +50,21 @@ describe('buildSequenceFrame', () => {
   it('carries the caption of the clamped step', () => {
     expect(buildSequenceFrame(scene, 99, 0, false).caption).toBe('three');
   });
+
+  it('shifts message rows under icon headers and keeps them on screen', () => {
+    const iconScene: SequenceScene = {
+      ...scene,
+      lanes: scene.lanes.map((l) => ({ ...l, icon: 'server' as const })),
+      steps: Array.from({ length: 7 }, (_, i) => ({
+        caption: String(i),
+        message: { from: 'a', to: 'b', label: 'm' + i },
+      })),
+    };
+    const f = buildSequenceFrame(iconScene, 6, 1, false);
+    expect(f.lanes[0].icon).toBe('server');
+    expect(f.messages[0].y).toBeGreaterThanOrEqual(78);
+    expect(f.messages[6].y).toBeLessThanOrEqual(190);
+    expect(buildSequenceFrame(scene, 2, 1, false).messages[0].y).toBe(56);
+  });
 });
+

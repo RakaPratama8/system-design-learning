@@ -1,11 +1,12 @@
 import { markerT, pointAlong } from '../motion';
+import type { IconName } from '../icons';
 import type { GraphScene, NodeState, Point } from '../types';
 import { displayedStates } from './shared';
 
 export type GraphBodyWithSteps = Pick<GraphScene, 'nodes' | 'edges' | 'steps'>;
 
 export interface GraphFrame {
-  nodes: { id: string; label: string; x: number; y: number; state: NodeState; highlighted: boolean }[];
+  nodes: { id: string; label: string; x: number; y: number; icon?: IconName; state: NodeState; highlighted: boolean }[];
   edges: { from: string; to: string; id: string; highlighted: boolean }[];
   marker?: Point;
   caption: string;
@@ -30,6 +31,7 @@ export function buildGraphFrame(scene: GraphBodyWithSteps, step: number, progres
       label: n.label,
       x: n.x,
       y: n.y,
+      icon: n.icon,
       state: stateOf(n.id),
       highlighted: highlight.has(n.id) || onPath.has(n.id),
     })),
