@@ -4,3 +4,8 @@ time	decision	reason	evidence	result
 2026-11-18T09:25	Defer: two rapid arrow presses during smooth scroll can advance one step	Minor; scroll still works	Checkpoint A review	deferred
 2026-11-18T09:25	Accept: diagram stays on step 1 without JavaScript	Spec says text must stay readable without JS; diagram is progressive enhancement	Checkpoint A review	accepted
 2026-11-18T09:25	Node boxes are 72x32 with labels capped at 12 chars and bounds/overlap checked in validateScene	Review found silent layout breakage would be copied into 23 lessons	validate tests	done
+2026-11-18T09:32	indexes: show index lookups as ~log2(n) checks (10, 13, 17, 20) against full-scan row counts	Intuition-level; real B-trees read pages with high fan-out so real counts are lower	lesson text says numbers differ in practice	needs owner review
+2026-11-18T09:32	latency-vs-throughput: bar values (100 ms, 10/100/400 req/s etc.) are illustrative, not measured	Teaching numbers chosen so relationships are visible	scene captions	accepted
+2026-11-18T09:32	sql-vs-nosql: picked the document store as the NoSQL example	Most common NoSQL family for app developers; key-value/column/graph not covered	lesson text says NoSQL is an umbrella	needs owner review
+2026-11-18T09:32	scaling: load percentages in the compare scene are illustrative	Show the ceiling and failure contrast	scene	accepted
+2026-11-18T09:32	dns: lesson stops at one resolver path (root, TLD, authoritative) and omits DNSSEC and recursive vs iterative terminology	Keep it beginner level	lesson text	accepted

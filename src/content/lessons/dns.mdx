@@ -1,0 +1,38 @@
+---
+title: IP addresses and DNS
+level: 1
+order: 2
+summary: How a name like example.com becomes the number a computer can connect to.
+---
+
+Computers find each other with numeric **IP addresses**, such as `93.184.216.34`. People prefer names. The **Domain Name System (DNS)** is the distributed directory that turns one into the other.
+
+<Step>
+Your browser needs the IP address for `www.example.com`. It does not search the whole internet itself. It asks a **DNS resolver**, usually run by your internet provider, your company, or a public service. The resolver does the legwork on the browser's behalf.
+</Step>
+
+<Step>
+The resolver first looks in its own **cache** for a recent answer. This time there is none, so it must look it up from the top. It starts with a **root server**, one of a small set of servers that sit at the top of the DNS hierarchy.
+</Step>
+
+<Step>
+The root server does not know the address of `www.example.com`. What it does know is who is responsible for each top-level domain such as `.com`, `.org`, or `.id`, so it answers with the address of the `.com` servers. DNS is a chain of referrals, not one big table.
+</Step>
+
+<Step>
+The resolver asks a `.com` server. It also does not hold the final answer, but it knows which servers are responsible for `example.com`. It replies with a referral to those servers.
+</Step>
+
+<Step>
+The resolver asks the **authoritative server** for `example.com`, the one the domain owner configured. This server holds the real record and returns the IP address.
+</Step>
+
+<Step>
+The resolver returns the address to the browser and **caches** it for the time the record allows, called its TTL (time to live). The next lookups of the same name are answered from the cache within milliseconds. This is also why changing a DNS record can take a while to reach everyone.
+</Step>
+
+## Key takeaways
+
+- DNS maps names to IP addresses through a hierarchy: root, top-level domain, then the domain's own servers.
+- Resolvers cache answers according to the TTL, which makes most lookups fast and keeps load off the root servers.
+- Caching also means DNS changes spread gradually, so plan for that when moving a site.

@@ -1,0 +1,38 @@
+---
+title: APIs (REST basics)
+level: 1
+order: 4
+summary: How clients and servers agree on what can be asked and how to ask it.
+---
+
+A client and a server can only work together if they agree on the rules. An **API** (application programming interface) is those rules: which requests exist and what they do. The most common style on the web is called **REST**.
+
+<Step>
+In REST, the things your system manages, such as orders, users, or products, are called **resources**, and each has a URL like `/orders/42`. The action is expressed by an **HTTP method** such as GET or POST. So `GET /orders/42` means "show me order 42".
+</Step>
+
+<Step>
+**GET** reads data. It should never change anything, which makes it safe to repeat and safe to cache. Here the API reads the order from the database and returns it, and the database is untouched.
+</Step>
+
+<Step>
+**POST** creates a new resource, for example `POST /orders` with the order details in the body of the request. Sending the same POST twice usually creates two orders, which is why retrying a POST needs care.
+</Step>
+
+<Step>
+**PUT** replaces a resource with the version you send, and **PATCH** changes only some of its fields. Repeating the same PUT gives the same result, a property called idempotency that matters a lot when requests may be retried.
+</Step>
+
+<Step>
+**DELETE** removes the resource. Deleting something that is already gone should simply leave the system in the same state, so DELETE is also treated as idempotent.
+</Step>
+
+<Step>
+Every response includes a **status code** that tells the client what happened: `200 OK` or `201 Created` for success, `404 Not Found` when the resource does not exist, `400` for a bad request, and `500` when the server itself failed. Clients rely on these codes to decide what to do next, such as retrying or showing an error.
+</Step>
+
+## Key takeaways
+
+- REST names things with URLs and actions with HTTP methods: GET reads, POST creates, PUT or PATCH updates, DELETE removes.
+- GET is safe to repeat and cache; PUT and DELETE are idempotent; POST is not by default.
+- Status codes are part of the contract: 2xx success, 4xx the client's mistake, 5xx the server's failure.

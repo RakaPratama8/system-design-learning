@@ -1,0 +1,38 @@
+---
+title: Latency vs throughput
+level: 1
+order: 9
+summary: Two different ways to measure how fast a system is, and why they are not the same.
+---
+
+"Fast" can mean two different things. Mixing them up leads to fixing the wrong problem.
+
+<Step>
+**Latency** is the time one request takes, from the moment it is sent until the response arrives. It is measured in time, such as milliseconds. Users feel latency directly: it is how long they wait.
+</Step>
+
+<Step>
+**Throughput** is how much work the system completes in a period of time, for example requests per second. It describes the whole system, not one request. If a single worker needs 100 ms for each job and does them one after another, it finishes ten jobs every second.
+</Step>
+
+<Step>
+Adding workers that run **in parallel** raises throughput without changing latency. Ten workers can complete a hundred jobs per second, yet each individual job still takes 100 ms. Scaling out usually improves throughput this way, not latency.
+</Step>
+
+<Step>
+When more requests arrive than the system can handle, they wait in a **queue**. Throughput stays at its maximum, but each request now spends extra time waiting, so latency grows. This is why a system can look healthy on throughput while users are already seeing slow pages.
+</Step>
+
+<Step>
+Making each request cheaper, for example with a cache or a better query, helps both numbers at once: it takes less time per request, so one worker finishes more of them each second.
+</Step>
+
+<Step>
+Sometimes the two pull against each other. **Batching**, such as writing 100 records to disk together instead of one at a time, raises throughput because there is less overhead per record, but each record may wait for the batch to fill. Which to favor depends on what users care about: a chat app needs low latency, while a nightly report cares about throughput.
+</Step>
+
+## Key takeaways
+
+- Latency is time per request; throughput is requests completed per unit of time.
+- Parallelism raises throughput; queues raise latency when a system is overloaded.
+- State which one you are optimizing for, and watch latency at the slow end (such as the 99th percentile), not just the average.

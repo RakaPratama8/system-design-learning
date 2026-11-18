@@ -1,0 +1,34 @@
+---
+title: Client and server
+level: 1
+order: 1
+summary: The basic conversation behind almost everything on the internet.
+---
+
+Nearly every system you will study is built from one simple pattern: one program asks, another answers.
+
+<Step>
+A **client** is any program that asks for something. Your browser is a client. So is a mobile app, and so is a backend service that calls another service. "Client" describes the role in the conversation, not a type of device.
+</Step>
+
+<Step>
+A **server** is a program that waits for requests and answers them. It runs on a computer that is switched on and connected all the time, and it listens at a known address. Often "server" also means the machine itself, but in design discussions it usually means the program that provides the service.
+</Step>
+
+<Step>
+The client starts the conversation by sending a **request**: a message that says what it wants, such as "give me the list of my orders". The request travels across the network, and when it arrives the server starts working on it. Notice the server's bar rising as it works.
+</Step>
+
+<Step>
+When the server has finished, it sends back a **response**: the data the client asked for, or an error explaining why it could not help. The client then uses the response, for example by drawing it on screen. This request and response pair is the unit that almost every later lesson builds on.
+</Step>
+
+<Step>
+A single server can talk to many clients at once, which is the point of having one. But it has limited capacity: only so much CPU, memory, and network. When too many clients ask at the same time it becomes busy and slow, and eventually it stops answering. Much of system design is about what to do when that happens.
+</Step>
+
+## Key takeaways
+
+- The client sends requests; the server sends responses. The roles are about the conversation, not the hardware.
+- Servers are shared by many clients, so their capacity is limited and shared.
+- Scaling, caching, and load balancing all exist to keep this simple pattern working as the number of clients grows.

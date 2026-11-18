@@ -1,0 +1,34 @@
+---
+title: Databases - SQL vs NoSQL
+level: 1
+order: 5
+summary: Two ways of organizing data, and what each one is good at.
+---
+
+Most systems need to store data safely and look it up quickly. The two big families of databases organize that data very differently.
+
+<Step>
+A **SQL** (relational) database stores data in **tables** made of rows and columns, with a fixed structure called a schema. Related data lives in separate tables that point at each other: an order refers to a customer, and items refer to an order. **NoSQL** is an umbrella name for other designs. A common one is the **document store**, which keeps each record as one flexible document, similar to a JSON object.
+</Step>
+
+<Step>
+To compare them, take a common job: show order 42 together with the customer who placed it and the items in it. Both databases can do it, but they get there in different ways.
+</Step>
+
+<Step>
+In SQL the order, customer, and items are in three tables. The database **joins** them: it follows the links between tables and assembles the result. Joins are powerful because you can ask new questions later without having planned for them, such as "all customers who bought this item".
+</Step>
+
+<Step>
+In a document store you save the order as a single document that already contains the customer details and the items. Reading it takes **one lookup** with no joins. That is fast and also makes it easier to spread documents across many servers.
+</Step>
+
+<Step>
+The cost of documents is **duplication**: the customer's name is copied into every order, so changing it means updating many documents. SQL keeps one copy and can enforce rules, such as "every order must have a customer", and offers strong transactions. Neither is better in general. Choose SQL when your data is highly related and correctness matters most, and a document store when your access pattern is simple and you need flexible structure or very large scale.
+</Step>
+
+## Key takeaways
+
+- SQL: tables, fixed schema, joins, and strong consistency guarantees.
+- Document (NoSQL): flexible records read in one lookup, easier to spread across servers, at the price of duplicated data.
+- Choose by how the data is related and how it will be queried, not by fashion. Many systems use both.

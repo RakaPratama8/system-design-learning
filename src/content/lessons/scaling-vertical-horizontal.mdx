@@ -1,0 +1,34 @@
+---
+title: Vertical vs horizontal scaling
+level: 1
+order: 7
+summary: Two ways to handle more load, and why most large systems end up using both.
+---
+
+When a system gets more users than it can handle, you have two basic choices: make the machine bigger, or add more machines.
+
+<Step>
+Traffic has grown and a single server is almost full. Left unattended it will start to respond slowly and then fail. Both diagrams start in the same position, and each shows a different fix.
+</Step>
+
+<Step>
+**Vertical scaling (scaling up)** means moving to a more powerful machine: more CPU cores, more memory, faster disks. It is the easy option, because the application does not change at all. You swap the machine, and the load now occupies less of the capacity.
+</Step>
+
+<Step>
+**Horizontal scaling (scaling out)** means adding more machines and spreading the work over them, usually behind a load balancer. The application must be able to run on several servers at once, so for example it should not keep important data only in one server's memory.
+</Step>
+
+<Step>
+Traffic grows again. Scaling up has a **ceiling**: the biggest machine you can buy is limited, and the price rises faster than the power. Scaling out can keep going by adding more servers, which is cheaper per unit of capacity, though it adds complexity.
+</Step>
+
+<Step>
+Failures also differ. A single big machine is a **single point of failure**: when it dies, the service is down. With several servers, losing one reduces capacity but the service continues, as the remaining servers take over its share. This resilience is a major reason large systems favor scaling out.
+</Step>
+
+## Key takeaways
+
+- Scale up for simplicity while you can; scale out for no ceiling and for resilience.
+- Horizontal scaling requires that servers are interchangeable, with shared state kept in a database or cache.
+- Real systems combine both: reasonably large machines, in a number that can grow.
