@@ -35,6 +35,7 @@ const sim: Sim = {
       readouts: [
         { label: 'Allowed', value: String(allowedTotal) },
         { label: 'Rejected (429)', value: String(rejectedTotal) },
+        { label: 'Effective bucket', value: String(burst) },
       ],
       routes: [
         { path: ['client', 'limiter', 'api'], weight: allowedTotal, outcome: 'ok' },

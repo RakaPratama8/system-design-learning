@@ -117,3 +117,12 @@ a { color: var(--accent); }
   text-transform: uppercase;
   color: var(--accent);
 }
+
+@media (max-width: 600px) {
+  .pin { height: 62vh; }
+  .player.live { flex-direction: column; gap: 0.4rem; }
+  .live .stage { flex: 1 1 0; min-height: 9rem; }
+  .panel { width: auto; flex: none; max-height: 50%; display: grid; grid-template-columns: 1fr 1fr; gap: 0 0.75rem; }
+  .readouts { grid-column: 1 / -1; margin-top: 0.25rem; }
+  .compare { flex-direction: column; gap: 0; }
+}

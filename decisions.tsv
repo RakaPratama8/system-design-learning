@@ -21,3 +21,4 @@ time	decision	reason	evidence	result
 2026-11-18T09:42	observability: frames the three pillars as metrics=that, traces=where, logs=why	Common teaching heuristic, not strict	lesson text	accepted
 2026-11-18T09:42	sagas: describes orchestration vs choreography in one sentence	Deeper coverage out of scope	lesson text	accepted
 2026-11-18T09:45	consistent-hashing scene: edge k2->sd is drawn from the first step because scenes cannot hide edges per step	No per-step edge visibility in the engine; step 1 caption says D is greyed	Level 3 accuracy review	accepted
+2026-11-18T09:51	Accept: 5 minor final-review findings deferred (readout window labels, BASE_URL links, no-JS diagram, TrafficStream idle redraw, sequence lane overlap cap, replication stale-window readout)	Polish; none breaks the learning flow	final whole-branch review	deferred

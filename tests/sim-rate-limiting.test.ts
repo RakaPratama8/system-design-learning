@@ -44,4 +44,10 @@ describe('rate limiting sim', () => {
     expect(run().states.limiter.label).toBe('44% rejected');
     expect(run({ traffic: 0 }).states.limiter.label).toBe('0% rejected');
   });
+
+  it('shows the bucket size actually used when the slider is below the refill rate', () => {
+    expect(readout(run({ rate: 10, burst: 3 }), 'Effective bucket')).toBe('10');
+    expect(readout(run({ rate: 10, burst: 30 }), 'Effective bucket')).toBe('30');
+  });
 });
+
