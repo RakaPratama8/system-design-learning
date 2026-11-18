@@ -18,7 +18,9 @@ describe('sharding sim', () => {
     expect(r.states.shard1).toEqual({ status: 'hot', fill: 1 });
     expect(r.states.shard2.fill).toBe(0.25);
     expect(readout(r, 'Busiest shard')).toBe('125%');
-    expect(r.routes.find((x) => x.path.includes('shard1'))!.outcome).toBe('fail');
+    const shard1 = r.routes.filter((x) => x.path.includes('shard1'));
+    expect(shard1.find((x) => x.outcome === 'ok')!.weight).toBeCloseTo(100);
+    expect(shard1.find((x) => x.outcome === 'fail')!.weight).toBeCloseTo(25);
   });
 
   it('marks shards beyond the chosen count as unused', () => {

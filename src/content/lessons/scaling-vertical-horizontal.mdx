@@ -8,11 +8,11 @@ summary: Two ways to handle more load, and why most large systems end up using b
 When a system gets more users than it can handle, you have two basic choices: make the machine bigger, or add more machines.
 
 <Step>
-Traffic has grown and a single server is almost full. Left unattended it will start to respond slowly and then fail. Both diagrams start in the same position, and each shows a different fix.
+Traffic has grown and a single server is almost full. Left unattended it will start to respond slowly and then fail. Both diagrams start in the same position, and each shows a different fix; on the right, two spare servers wait to be added.
 </Step>
 
 <Step>
-**Vertical scaling (scaling up)** means moving to a more powerful machine: more CPU cores, more memory, faster disks. It is the easy option, because the application does not change at all. You swap the machine, and the load now occupies less of the capacity.
+**Vertical scaling (scaling up)** means moving to a more powerful machine: more CPU cores, more memory, faster disks. It is the easy option, because the application does not change at all, though swapping the machine usually means a short outage. Afterwards the load occupies less of the capacity.
 </Step>
 
 <Step>

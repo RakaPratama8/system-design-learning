@@ -1,0 +1,38 @@
+---
+title: CDNs
+level: 2
+order: 11
+summary: Serve files from a server near the user instead of from far away.
+---
+
+Even with a fast server, distance matters. A request that crosses an ocean spends tens or hundreds of milliseconds in transit, and that is time no code on the server can remove. A **content delivery network (CDN)** attacks the distance itself.
+
+<Step>
+Imagine your **origin** server is in one data center. A user on the other side of the world must send every request, and receive every byte, over that long path. Large files such as images and videos make it worse, and the origin must also serve every user.
+</Step>
+
+<Step>
+A CDN is a network of **edge servers** placed in many cities. Users are routed to a nearby edge, usually through DNS or a network feature called anycast. Each edge can keep copies of your files, so it acts as a cache that is physically close to the user.
+</Step>
+
+<Step>
+The first time anyone near this edge asks for a file, the edge does not have it, so this is a **cache miss**. It fetches the file from the origin, which takes the long trip once.
+</Step>
+
+<Step>
+The edge saves a copy and sends the file to the user. From now on, this edge holds a **cached** copy and can serve it without contacting the origin.
+</Step>
+
+<Step>
+Later requests from nearby users are answered directly by the edge. They are faster, because the data travels a short distance, and the origin is nearly idle, so it can handle far more users with the same hardware.
+</Step>
+
+<Step>
+Cached copies cannot live forever. Each file has a **time to live (TTL)**, and after that the edge checks for a new version. When you deploy a change you can also **purge** the cache. CDNs work best for content that is the same for many users, such as images, scripts, and videos, and not for personal data.
+</Step>
+
+## Key takeaways
+
+- A CDN caches content on servers near users, which cuts latency and shields the origin.
+- The first request to an edge is a miss; later ones are hits.
+- Use TTLs and purging to keep content fresh, and cache only content that is safe to share between users.

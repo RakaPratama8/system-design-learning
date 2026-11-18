@@ -12,7 +12,7 @@ Without any help, the database must do a **full scan**: read every row and compa
 </Step>
 
 <Step>
-An **index** is an extra, sorted structure built on a column, much like the index at the back of a book. Because it is sorted, the database can jump straight to the right place instead of reading everything. It is usually stored as a **B-tree**, and finding one value takes roughly log₂(n) steps. For 1,000 rows that is about 10.
+An **index** is an extra, sorted structure built on a column, much like the index at the back of a book. Because it is sorted, the database can jump straight to the right place instead of reading everything: finding one value takes roughly log₂(n) comparisons, about 10 for 1,000 rows. Real databases store the index as a **B-tree**, which packs many keys into each node, so in practice that is only a few disk reads.
 </Step>
 
 <Step>

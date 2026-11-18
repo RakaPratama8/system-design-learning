@@ -1,0 +1,34 @@
+---
+title: Pub/sub and event streams
+level: 2
+order: 14
+summary: Announce what happened and let any number of services react to it.
+---
+
+A message queue hands each job to one worker. Sometimes you want the opposite: something happened, and several different parts of the system should know about it. That is **publish/subscribe**, or pub/sub.
+
+<Step>
+A **publisher** sends an **event**, such as `OrderPlaced`, to a named **topic**. The publisher only says what happened. It does not know which services care, how many there are, or what they will do about it.
+</Step>
+
+<Step>
+Services that care about this kind of event **subscribe** to the topic. The email service wants to send a receipt, analytics wants to count the order, and the search index wants to update stock. Each subscribes on its own, with no change to the publisher.
+</Step>
+
+<Step>
+When an event arrives, the topic delivers **a copy to every subscriber**. This is the key difference from a queue, where each message is taken by only one of the consumers. In pub/sub the same event fans out to all of them.
+</Step>
+
+<Step>
+Subscribers are independent. If analytics is down or slow, the other services are unaffected, and in most systems the topic keeps the events for the stalled subscriber to catch up later. This isolation is a major reason systems are built this way.
+</Step>
+
+<Step>
+Adding another reaction later means adding a new subscriber, not editing the publisher. Some systems, such as event streaming platforms (Kafka is a well-known example), also **keep the events in order for a long time**, so new subscribers can replay history. This makes pub/sub flexible, at the cost of making the flow of the whole system harder to see in one place.
+</Step>
+
+## Key takeaways
+
+- Queue: each message goes to one consumer. Pub/sub: each event goes to every subscriber.
+- Publishers and subscribers do not know each other, which keeps services loosely coupled.
+- The trade-off is traceability: it takes tooling to follow what happened as an event spreads through many services.

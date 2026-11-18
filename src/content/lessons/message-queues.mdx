@@ -1,0 +1,38 @@
+---
+title: Message queues
+level: 2
+order: 13
+summary: Decouple the part that creates work from the part that does it.
+---
+
+Some work is slow, or arrives in bursts, or can be done later: sending emails, resizing images, charging cards. Making the caller wait for it is a bad fit. A **message queue** lets one part of the system hand work to another without waiting.
+
+<Step>
+A **producer** creates a message describing a job, for example "send a welcome email to user 7", and places it on a **queue**. It does not call the email code directly and does not wait for the result, so it is free to carry on at once.
+</Step>
+
+<Step>
+The queue **stores messages** until someone takes them, in roughly the order they arrived. This decouples the two sides in time: the producer can send while the consumer is busy, slow, or even briefly offline, and nothing is lost.
+</Step>
+
+<Step>
+A **consumer** takes the next message, does the work, and then **acknowledges** it. Only after the acknowledgement does the queue delete the message. The consumer works at its own pace, which the producer no longer controls.
+</Step>
+
+<Step>
+Traffic often comes in bursts, such as a flash sale. Without a queue, the burst would hit the worker directly and could overwhelm it. With a queue, the extra messages simply wait, so the system **smooths the load**. The price is delay: the longer the queue, the longer a message waits.
+</Step>
+
+<Step>
+When the queue keeps growing, add more consumers. Each takes messages from the same queue, so the work is shared and the queue drains. This is an easy way to scale out the slow part of a system independently of the rest.
+</Step>
+
+<Step>
+Failures are expected. If a consumer crashes before acknowledging, the queue **delivers the message again** to another consumer, so work is not lost. The consequence is that a message can sometimes be processed more than once, so consumers should be written to handle duplicates safely, which is covered in the idempotency lesson.
+</Step>
+
+## Key takeaways
+
+- A queue lets a producer hand off work and move on, and lets the consumer work at its own pace.
+- It absorbs bursts and lets you scale consumers independently; the cost is added delay and extra moving parts.
+- Delivery is usually "at least once", so processing must tolerate duplicates.

@@ -12,9 +12,9 @@ describe('caching sim', () => {
     expect(readout(r, 'Hit rate')).toBe('0%');
     expect(r.states.db).toEqual({ status: 'hot', fill: 1 });
     expect(r.states.cache.status).toBe('down');
-    expect(r.routes).toHaveLength(1);
-    expect(r.routes[0].path).toEqual(['client', 'app', 'db']);
-    expect(r.routes[0].outcome).toBe('fail');
+    expect(r.routes.every((x) => x.path.join() === 'client,app,db')).toBe(true);
+    expect(r.routes.find((x) => x.outcome === 'ok')!.weight).toBeCloseTo(0.5);
+    expect(r.routes.find((x) => x.outcome === 'fail')!.weight).toBeCloseTo(0.5);
   });
 
   it('shields the database with a full-size cache', () => {
@@ -29,7 +29,8 @@ describe('caching sim', () => {
   it('has no hits with an empty cache', () => {
     const r = run({ cacheSize: 0 });
     expect(readout(r, 'Hit rate')).toBe('0%');
-    expect(r.routes.find((x) => x.path.includes('cache') && x.path.includes('db'))!.weight).toBe(1);
+    const misses = r.routes.filter((x) => x.path.includes('cache') && x.path.includes('db'));
+    expect(misses.reduce((sum, x) => sum + x.weight, 0)).toBeCloseTo(1);
   });
 
   it('handles zero traffic', () => {
@@ -38,9 +39,9 @@ describe('caching sim', () => {
     expect(JSON.stringify(r)).not.toMatch(/NaN|Infinity|null/);
   });
 
-  it('fails misses exactly when the database load exceeds its capacity', () => {
-    const miss = (r: ReturnType<typeof run>) => r.routes.find((x) => x.path.includes('db'))!;
-    expect(miss(run({ cacheSize: 0, traffic: 100 })).outcome).toBe('ok');
-    expect(miss(run({ cacheSize: 0, traffic: 110 })).outcome).toBe('fail');
+  it('drops only the misses the database cannot absorb', () => {
+    const failing = (r: ReturnType<typeof run>) => r.routes.filter((x) => x.outcome === 'fail');
+    expect(failing(run({ cacheSize: 0, traffic: 100 }))).toHaveLength(0);
+    expect(failing(run({ cacheSize: 0, traffic: 110 }))[0].weight).toBeGreaterThan(0);
   });
 });

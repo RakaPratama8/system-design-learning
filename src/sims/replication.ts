@@ -1,4 +1,4 @@
-import { loadState } from '../engine/sim/shared';
+import { loadState, splitRoute } from '../engine/sim/shared';
 import type { ControlValues, NodeState, Route, Sim, SimResult } from '../engine/types';
 
 const CAPACITY = 100;
@@ -37,7 +37,7 @@ const sim: Sim = {
         : { path: ['app'], weight: reads * WRITE_SHARE, outcome: 'fail' },
     ];
     if (servers.length === 0) routes.push({ path: ['app'], weight: reads, outcome: 'fail' });
-    for (const id of servers) routes.push({ path: ['app', id], weight: load, outcome: load > CAPACITY ? 'fail' : 'ok' });
+    for (const id of servers) routes.push(...splitRoute(['app', id], load, load, CAPACITY));
 
     const served = reads === 0 ? 1 : Math.min(1, (servers.length * CAPACITY) / reads);
     return {

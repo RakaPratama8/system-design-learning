@@ -12,11 +12,14 @@ const scene: Scene = {
     { from: 'api', to: 'db' },
   ],
   steps: [
-    { caption: 'An API is a menu of things a client may ask for. REST uses URLs for things and HTTP methods for actions.', highlight: ['api'] },
+    {
+      caption: 'An API is a menu of things a client may ask for. REST uses URLs for things and HTTP methods for actions.',
+      highlight: ['api'],
+      states: { db: { status: 'ok', fill: 0.3, label: '3 orders' } },
+    },
     {
       caption: 'GET /orders/42 reads an order and changes nothing.',
       marker: ['client', 'api', 'db', 'api', 'client'],
-      states: { db: { status: 'ok', fill: 0.3, label: '3 orders' } },
     },
     {
       caption: 'POST /orders creates a new order.',
@@ -34,7 +37,7 @@ const scene: Scene = {
       states: { db: { status: 'ok', fill: 0.3, label: '3 orders' } },
     },
     {
-      caption: 'Every response has a status code, such as 200 OK or 404 Not Found.',
+      caption: 'Every response has a status code, such as 200 OK, or 404 Not Found if you ask for order 42 again after deleting it.',
       marker: ['api', 'client'],
       states: { client: { status: 'ok', label: '404' } },
     },

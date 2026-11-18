@@ -18,3 +18,11 @@ export function pickRoute(routes: Route[], r: number): Route | undefined {
   }
   return routes[routes.length - 1];
 }
+
+// A route whose node is overloaded still serves what fits: split it into the served share and the dropped share.
+export function splitRoute(path: string[], weight: number, load: number, capacity: number): Route[] {
+  const served = load <= capacity ? 1 : capacity / load;
+  const routes: Route[] = [{ path, weight: weight * served, outcome: 'ok' }];
+  if (served < 1) routes.push({ path, weight: weight * (1 - served), outcome: 'fail' });
+  return routes;
+}

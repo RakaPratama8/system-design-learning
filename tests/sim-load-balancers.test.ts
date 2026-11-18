@@ -24,7 +24,9 @@ describe('load balancer sim', () => {
     const r = run({ s2: false, s3: false, traffic: 250 });
     expect(r.states.s1).toEqual({ status: 'hot', fill: 1 });
     expect(readout(r, 'Dropped')).toBe('60%');
-    expect(r.routes.find((x) => x.path.includes('s1'))!.outcome).toBe('fail');
+    const s1 = r.routes.filter((x) => x.path.includes('s1'));
+    expect(s1.find((x) => x.outcome === 'ok')!.weight).toBeCloseTo(100);
+    expect(s1.find((x) => x.outcome === 'fail')!.weight).toBeCloseTo(150);
   });
 
   it('handles zero traffic', () => {

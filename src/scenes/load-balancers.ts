@@ -28,8 +28,8 @@ const scene: Scene = {
       states: { s2: { status: 'ok', fill: 0.33 }, s3: { status: 'ok', fill: 0.33 } },
     },
     {
-      caption: 'Server 3 crashes. The load balancer notices and skips it; the others pick up its share.',
-      highlight: ['s3'],
+      caption: 'Server 3 stops answering health checks. The load balancer skips it, and the others pick up its share.',
+      marker: ['lb', 's3'],
       states: {
         s1: { status: 'ok', fill: 0.5 },
         s2: { status: 'ok', fill: 0.5 },

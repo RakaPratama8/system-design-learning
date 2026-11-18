@@ -47,7 +47,7 @@ const scene: Scene = {
       right: { marker: ['doc', 'query'], states: { doc: { status: 'ok', label: '1 read' } } },
     },
     {
-      caption: 'Trade-off: SQL protects consistency and handles flexible queries; documents are flexible and scale out easily, but copy data.',
+      caption: 'Trade-off: SQL protects consistency and handles ad hoc queries; documents have a flexible structure and scale out easily, but copy data.',
       left: { highlight: ['customers'], states: { customers: { status: 'ok', label: '1 copy' } } },
       right: { highlight: ['doc'], states: { doc: { status: 'ok', label: 'many copies' } } },
     },

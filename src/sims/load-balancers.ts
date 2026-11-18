@@ -1,4 +1,4 @@
-import { loadState } from '../engine/sim/shared';
+import { loadState, splitRoute } from '../engine/sim/shared';
 import type { ControlValues, Route, Sim, SimResult } from '../engine/types';
 
 const CAPACITY = 100;
@@ -23,11 +23,7 @@ const sim: Sim = {
     const routes: Route[] =
       alive.length === 0
         ? [{ path: ['client', 'lb'], weight: 1, outcome: 'fail' }]
-        : alive.map((id) => ({
-            path: ['client', 'lb', id],
-            weight: share,
-            outcome: share > CAPACITY ? 'fail' : 'ok',
-          }));
+        : alive.flatMap((id) => splitRoute(['client', 'lb', id], share, share, CAPACITY));
     return {
       states,
       readouts: [{ label: 'Dropped', value: `${Math.round(dropped * 100)}%` }],

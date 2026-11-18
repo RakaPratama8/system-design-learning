@@ -28,7 +28,7 @@ const scene: Scene = {
   },
   steps: [
     {
-      caption: 'Traffic grows and the only server is nearly full.',
+      caption: 'Traffic grows and one server is nearly full. On the right, two spare servers are ready to be added.',
       left: { highlight: ['server'], states: { server: { status: 'hot', fill: 0.9, label: 'nearly full' } } },
       right: {
         highlight: ['s1'],
@@ -56,11 +56,11 @@ const scene: Scene = {
       right: { states: { s1: { status: 'ok', fill: 0.6 }, s2: { status: 'ok', fill: 0.6 }, s3: { status: 'ok', fill: 0.6 } } },
     },
     {
-      caption: 'A failure hurts differently: one server down takes everything offline, while the other group carries on.',
+      caption: 'A failure hurts differently: one server down takes everything offline, while the scaled-out group carries on at higher load.',
       left: { states: { server: { status: 'down', label: 'failed' } } },
       right: {
         highlight: ['s3'],
-        states: { s1: { status: 'ok', fill: 0.9 }, s2: { status: 'ok', fill: 0.9 }, s3: { status: 'down', label: 'failed' } },
+        states: { s1: { status: 'hot', fill: 0.9 }, s2: { status: 'hot', fill: 0.9 }, s3: { status: 'down', label: 'failed' } },
       },
     },
   ],

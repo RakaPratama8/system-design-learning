@@ -1,4 +1,4 @@
-import { loadState } from '../engine/sim/shared';
+import { loadState, splitRoute } from '../engine/sim/shared';
 import { shardLoads } from '../engine/sim/shardLoads';
 import type { ControlValues, NodeState, Route, Sim, SimResult } from '../engine/types';
 
@@ -21,7 +21,7 @@ const sim: Sim = {
       const id = `shard${i + 1}`;
       if (i < shards) {
         states[id] = loadState(loads[i], CAPACITY);
-        routes.push({ path: ['client', 'router', id], weight: loads[i], outcome: loads[i] > CAPACITY ? 'fail' : 'ok' });
+        routes.push(...splitRoute(['client', 'router', id], loads[i], loads[i], CAPACITY));
       } else {
         states[id] = { status: 'ok', fill: 0, label: 'unused' };
       }
