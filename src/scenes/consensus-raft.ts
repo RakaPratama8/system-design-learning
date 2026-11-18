@@ -3,9 +3,9 @@ import type { Scene } from '../engine/types';
 const scene: Scene = {
   type: 'sequence',
   lanes: [
-    { id: 'a', label: 'Node A' },
-    { id: 'b', label: 'Node B' },
-    { id: 'c', label: 'Node C' },
+    { id: 'a', label: 'Node A', icon: 'node' },
+    { id: 'b', label: 'Node B', icon: 'node' },
+    { id: 'c', label: 'Node C', icon: 'node' },
   ],
   steps: [
     {

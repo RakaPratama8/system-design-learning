@@ -3,12 +3,12 @@ import type { Scene } from '../engine/types';
 const scene: Scene = {
   type: 'graph',
   nodes: [
-    { id: 'client', label: 'Clients', x: 50, y: 100 },
-    { id: 'router', label: 'Router', x: 170, y: 100 },
-    { id: 'shard1', label: 'Shard 1', x: 320, y: 44 },
-    { id: 'shard2', label: 'Shard 2', x: 320, y: 84 },
-    { id: 'shard3', label: 'Shard 3', x: 320, y: 124 },
-    { id: 'shard4', label: 'Shard 4', x: 320, y: 164 },
+    { id: 'client', label: 'Clients', x: 50, y: 100, icon: 'people' },
+    { id: 'router', label: 'Router', x: 160, y: 100, icon: 'router' },
+    { id: 'shard1', label: 'Shard 1', x: 260, y: 60, icon: 'shard' },
+    { id: 'shard2', label: 'Shard 2', x: 340, y: 60, icon: 'shard' },
+    { id: 'shard3', label: 'Shard 3', x: 260, y: 130, icon: 'shard' },
+    { id: 'shard4', label: 'Shard 4', x: 340, y: 130, icon: 'shard' },
   ],
   edges: [
     { from: 'client', to: 'router' },

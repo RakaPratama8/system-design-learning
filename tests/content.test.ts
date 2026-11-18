@@ -97,6 +97,8 @@ const ICONIZED = [
   'scaling-vertical-horizontal', 'load-balancers',
   'caching', 'cdn', 'replication', 'message-queues', 'pub-sub', 'rate-limiting', 'api-gateway',
   'monolith-vs-microservices', 'auth-sessions-tokens',
+  'sharding', 'consistent-hashing', 'cap-consistency', 'consensus-raft', 'sagas', 'idempotency-retries',
+  'observability', 'case-url-shortener', 'case-news-feed', 'case-chat',
 ];
 
 describe('icons', () => {

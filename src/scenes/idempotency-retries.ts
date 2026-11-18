@@ -3,8 +3,8 @@ import type { Scene } from '../engine/types';
 const scene: Scene = {
   type: 'sequence',
   lanes: [
-    { id: 'client', label: 'Client' },
-    { id: 'server', label: 'Server' },
+    { id: 'client', label: 'Client', icon: 'laptop' },
+    { id: 'server', label: 'Server', icon: 'server' },
   ],
   steps: [
     {
