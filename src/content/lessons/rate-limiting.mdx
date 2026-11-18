@@ -1,0 +1,39 @@
+---
+title: Rate limiting
+level: 2
+order: 15
+summary: Protect a service from being overwhelmed by capping how often each client can call it.
+poke: true
+---
+
+A service has limited capacity. A buggy client stuck in a retry loop, a scraper, or an attacker can send far more requests than it can handle and hurt everyone else. **Rate limiting** sets a cap on how many requests a client may make in a period of time.
+
+<Step>
+A popular way to do this is the **token bucket**. Picture a bucket that holds a fixed number of tokens, the *burst size*. It starts full. The limiter sits in front of the API and checks the bucket before letting any request through.
+</Step>
+
+<Step>
+Every request that arrives must pay **one token**. If the bucket has a token, the request is allowed and passed on to the API. Look at the bar in the limiter: it drops a little with each request.
+</Step>
+
+<Step>
+Tokens are added back at a steady *refill rate*, for example 10 per second, but never beyond the size of the bucket. If clients send less than the refill rate on average, the bucket stays nearly full and they never notice the limiter.
+</Step>
+
+<Step>
+Short bursts are allowed. A client can spend all the tokens in the bucket at once, so the burst size controls how large a spike is tolerated. A burst that is bigger than the bucket, or one that keeps going, drains it faster than it refills.
+</Step>
+
+<Step>
+When the bucket is empty, the limiter **rejects** further requests, normally with HTTP status `429 Too Many Requests`, often with a header telling the client how long to wait. The API behind it never sees these requests. Well-behaved clients slow down and retry later.
+</Step>
+
+<TryIt>
+The model sends your chosen traffic every second for ten seconds, with one second carrying four times as much. Raise the traffic or lower the refill rate and watch the rejected count grow. Then increase the bucket size and see how a bigger burst allowance changes what gets through.
+</TryIt>
+
+## Key takeaways
+
+- A token bucket allows a steady average rate (the refill rate) plus bursts up to the bucket size.
+- Requests over the limit are rejected early, usually with a 429, so the backend stays healthy.
+- Limits are normally applied per client, such as per user, API key or IP address, so one heavy user cannot starve the others.
