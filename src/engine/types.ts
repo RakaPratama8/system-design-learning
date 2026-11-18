@@ -34,3 +34,22 @@ export interface NumbersScene {
   steps: { caption: string; values: Record<string, number> }[];
 }
 export type Scene = GraphScene | SequenceScene | CompareScene | NumbersScene;
+
+export interface ControlDef {
+  id: string;
+  label: string;
+  kind: 'toggle' | 'slider';
+  min?: number;
+  max?: number;
+  step?: number;
+  default: number | boolean;
+}
+export type ControlValues = Record<string, number | boolean>;
+export interface Route { path: string[]; weight: number; outcome: 'ok' | 'fail' }
+export interface SimResult {
+  states: Record<string, NodeState>;
+  readouts: { label: string; value: string }[];
+  routes: Route[];
+  trafficRate: number;
+}
+export interface Sim { controls: ControlDef[]; run(values: ControlValues): SimResult }

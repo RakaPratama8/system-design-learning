@@ -1,16 +1,28 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { clampStep, computeScroll } from '../engine/scroll';
+import type { GraphFrame } from '../engine/frames/graph';
+import type { ControlValues } from '../engine/types';
 import { scenes } from '../scenes';
+import { sims } from '../sims';
 import { SceneView } from './SceneView';
+import { GraphSceneView } from './scenes/GraphScene';
+import { TrafficStream } from './TrafficStream';
+import { TryItPanel } from './TryItPanel';
 
 
 export function Player({ slug }: { slug: string }) {
   const scene = scenes[slug];
+  const sim = sims[slug];
   const root = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ step: 0, progress: 0 });
   const [count, setCount] = useState(scene?.steps.length ?? 0);
   const [reduced, setReduced] = useState(false);
   const reducedRef = useRef(false);
+  const [live, setLive] = useState(false);
+  const [values, setValues] = useState<ControlValues>(() =>
+    Object.fromEntries((sim?.controls ?? []).map((c) => [c.id, c.default])),
+  );
+  const result = useMemo(() => (sim ? sim.run(values) : null), [sim, values]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -39,6 +51,8 @@ export function Player({ slug }: { slug: string }) {
       raf = 0;
       const next = computeScroll(rects(), anchor());
       setPos((p) => (p.step === next.step && p.progress === next.progress ? p : next));
+      const tryit = document.querySelector('[data-tryit]');
+      setLive(Boolean(tryit) && tryit!.getBoundingClientRect().top <= anchor());
     };
     const schedule = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -74,6 +88,22 @@ export function Player({ slug }: { slug: string }) {
   }, [scene]);
 
   if (!scene) return null;
+  if (live && sim && result && scene.type === 'graph') {
+    const frame: GraphFrame = {
+      nodes: scene.nodes.map((n) => ({ ...n, state: result.states[n.id] ?? { status: 'ok' }, highlighted: false })),
+      edges: scene.edges.map((e) => ({ ...e, id: `${e.from}>${e.to}`, highlighted: false })),
+      caption: 'Live simulation',
+    };
+    return (
+      <div ref={root} className="player live" data-live>
+        <div className="stage">
+          <GraphSceneView frame={frame} />
+          {!reduced && <TrafficStream nodes={scene.nodes} routes={result.routes} rate={result.trafficRate} />}
+        </div>
+        <TryItPanel sim={sim} values={values} result={result} onChange={(id, v) => setValues((s) => ({ ...s, [id]: v }))} />
+      </div>
+    );
+  }
   return (
     <div ref={root} className="player">
       <SceneView scene={scene} step={pos.step} progress={pos.progress} reduced={reduced} />

@@ -1,0 +1,39 @@
+---
+title: Load balancers
+level: 1
+order: 8
+summary: How traffic is shared across servers, and what happens when one fails.
+poke: true
+---
+
+One server can only handle so much traffic, and if it dies the whole site goes down. The usual answer is to run several identical servers and put a **load balancer** in front of them.
+
+<Step>
+Clients never talk to the servers directly. They send every request to a single address, the load balancer, which decides where the request should really go. From the outside it still looks like one server.
+</Step>
+
+<Step>
+For each request the load balancer **picks a server** and forwards it there. The server does the work and its reply travels back through the load balancer to the client. The small bar inside each server shows how busy it is.
+</Step>
+
+<Step>
+A simple and very common strategy is **round robin**: request one goes to Server 1, request two to Server 2, request three to Server 3, then back to Server 1. If the servers are alike and the requests cost roughly the same, the work ends up evenly shared.
+</Step>
+
+<Step>
+Load balancers also run **health checks**, small periodic requests that ask each server "are you alive?". When Server 3 stops answering, the load balancer stops sending it traffic. The other two servers take over its share, so each gets busier, but users keep getting responses.
+</Step>
+
+<Step>
+When Server 3 is repaired it passes the health checks again and rejoins the pool, and the load evens out. This is why you can restart or upgrade servers one at a time without taking the site offline.
+</Step>
+
+<TryIt>
+Switch servers on and off and change the traffic. Each server in this model can handle 100 requests per second. Watch what happens to the bars when a server is off, and push the traffic past what the remaining servers can take: the excess requests are dropped.
+</TryIt>
+
+## Key takeaways
+
+- A load balancer spreads requests across identical servers and hides failures from users.
+- Health checks let it route around a dead server automatically.
+- It only helps while there is spare capacity: if the survivors are already full, a failure still causes dropped requests.

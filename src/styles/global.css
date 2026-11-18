@@ -87,3 +87,18 @@ a { color: var(--accent); }
 .nums text { font-size: 11px; fill: var(--text); font-family: var(--font); }
 .nums .track { fill: var(--line); }
 .nums .val { fill: var(--accent); }
+
+.player.live { flex-direction: row; gap: 0.75rem; }
+.live .stage { flex: 1; position: relative; min-width: 0; }
+.live .stage .scene { position: absolute; inset: 0; }
+.live .dots { pointer-events: none; }
+.dot { fill: var(--accent); }
+.dot.fail { fill: var(--down); }
+.panel { width: 13rem; flex: none; font-size: 0.8rem; overflow: auto; }
+.ctl { display: block; margin-bottom: 0.4rem; }
+.ctl input[type='range'] { display: block; width: 100%; }
+.readouts { margin: 0.5rem 0 0; }
+.readouts div { display: flex; justify-content: space-between; }
+.readouts dt { color: var(--muted); }
+.readouts dd { margin: 0; font-weight: 600; }
+.tryit { min-height: 45vh; padding-top: 1rem; }

@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Step from '../../components/Step.astro';
+import TryIt from '../../components/TryIt.astro';
 import { Player } from '../../components/Player';
 
 export async function getStaticPaths() {
@@ -17,7 +18,7 @@ const { Content } = await render(entry);
   <h1>{entry.data.title}</h1>
   <p class="summary">{entry.data.summary}</p>
   <div class="pin"><Player slug={entry.id} client:load /></div>
-  <article class="lesson"><Content components={{ Step }} /></article>
+  <article class="lesson"><Content components={{ Step, TryIt }} /></article>
   <p><button data-mark-done data-slug={entry.id} class="done-btn">Mark as done</button></p>
 </Base>
 
