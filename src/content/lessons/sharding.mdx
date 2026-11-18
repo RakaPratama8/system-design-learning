@@ -1,0 +1,43 @@
+---
+title: Sharding and partitioning
+level: 3
+order: 20
+summary: Split a large dataset across many databases so no single one has to hold or serve it all.
+poke: true
+---
+
+Replication copies the *same* data to more servers, which helps with reads and safety. But when the dataset itself no longer fits on one machine, or the volume of **writes** is too high for one primary, copies do not help. You need to split the data into pieces. That is **sharding**, also called horizontal partitioning.
+
+<Step>
+Start with a single database that stores everything and receives every request. Eventually it runs out of disk space, memory, or capacity to handle writes. Buying a bigger machine can delay this, but only to a point, and it stays a single point of failure.
+</Step>
+
+<Step>
+Sharding divides the data into **shards**, each stored on its own database server. Each shard holds only part of the data, so each one has less to store and less traffic to handle. Together they can hold far more than any one machine.
+</Step>
+
+<Step>
+Which shard holds a given record? That is decided by a **shard key**, a field such as the user id. A router (sometimes called a coordinator or built into the client library) looks at the key of each request and sends it to the right shard. A common way is to hash the key and take the result modulo the number of shards.
+</Step>
+
+<Step>
+When the key values are spread evenly, so is the work. Every shard handles a similar share of the traffic and none is close to its limit. Adding more shards then adds capacity, in principle in proportion.
+</Step>
+
+<Step>
+Real traffic is not always even. If one user, product, or celebrity account is far more popular than the rest, all of their requests land on the same shard, a **hot shard**. The other shards sit mostly idle while one is overwhelmed, so adding more shards does not fix it.
+</Step>
+
+<Step>
+This is why **choosing the shard key is the most important sharding decision**. A good key has many distinct values and spreads both data and traffic evenly. Sharding also has costs: queries and transactions that span shards are harder, and changing the number of shards later means moving data around, which a technique called consistent hashing, covered later, makes easier.
+</Step>
+
+<TryIt>
+Change the number of shards and watch capacity and load per shard change, each shard handling 100 requests per second in this model. Then switch on the hot key, where half of all requests go to one key, and see why one shard overloads even when total capacity is plenty.
+</TryIt>
+
+## Key takeaways
+
+- Sharding splits data across databases using a shard key, so no single server holds or serves everything.
+- Even key distribution gives near-linear scaling; a hot key overloads one shard no matter how many you add.
+- The costs are harder cross-shard queries and the work of rebalancing data when shards change.
