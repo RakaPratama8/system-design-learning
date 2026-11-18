@@ -126,3 +126,24 @@ a { color: var(--accent); }
   .readouts { grid-column: 1 / -1; margin-top: 0.25rem; }
   .compare { flex-direction: column; gap: 0; }
 }
+
+:root {
+  --ic-slate: #475569;
+  --ic-slate-soft: #cbd5e1;
+  --ic-blue: #2563eb;
+  --ic-blue-soft: #bfdbfe;
+  --ic-violet: #7c3aed;
+  --ic-violet-soft: #ddd6fe;
+  --ic-teal: #0d9488;
+  --ic-teal-soft: #99f6e4;
+  --ic-pink: #db2777;
+  --ic-pink-soft: #fbcfe8;
+}
+.ic-slate { --ic-main: var(--ic-slate); --ic-soft: var(--ic-slate-soft); }
+.ic-blue { --ic-main: var(--ic-blue); --ic-soft: var(--ic-blue-soft); }
+.ic-violet { --ic-main: var(--ic-violet); --ic-soft: var(--ic-violet-soft); }
+.ic-teal { --ic-main: var(--ic-teal); --ic-soft: var(--ic-teal-soft); }
+.ic-pink { --ic-main: var(--ic-pink); --ic-soft: var(--ic-pink-soft); }
+.icon .m { fill: var(--ic-main); }
+.icon .s { fill: var(--ic-soft); }
+.icon .l { fill: none; stroke: var(--ic-main); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
