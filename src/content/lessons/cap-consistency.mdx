@@ -1,0 +1,42 @@
+---
+title: CAP theorem and consistency models
+level: 3
+order: 22
+summary: What a distributed system must give up when the network splits.
+---
+
+Once data is stored on more than one machine, the machines can disagree. The **CAP theorem** is a way of reasoning about what happens then.
+
+<Step>
+Two nodes each hold a copy of the same data. A client writes `x = 2` to Node 1. A system that keeps copies in step is said to be **consistent**: every read sees the latest write. Right now Node 2 still holds the old value, `x = 1`.
+</Step>
+
+<Step>
+Node 1 **replicates** the change to Node 2, and both hold `x = 2`. In a healthy network this takes a few milliseconds, and the question never comes up. The theorem is about what happens when this step cannot happen.
+</Step>
+
+<Step>
+A **network partition** is when the nodes are running but cannot reach each other: a cable fails, a switch drops, a data center is cut off. Partitions are not rare on large networks, so a distributed system has to be designed for them. You do not get to choose to avoid partitions.
+</Step>
+
+<Step>
+While the partition lasts, a client writes `x = 3` to Node 1. Node 1 accepts it, but cannot pass it on, so the two copies now differ. This is the situation the theorem describes.
+</Step>
+
+<Step>
+A client now reads `x` from Node 2. Node 2 does not know that a newer value exists. What should it do? The CAP theorem says that during a partition you can have **either** consistency **or** availability, not both.
+</Step>
+
+<Step>
+If the system favors **availability** (the "A"), Node 2 answers with `x = 2`. The system keeps working, but the answer is **stale**. Systems like this are often called *eventually consistent*: once the partition heals, the copies converge, and until then readers may see old data. Shopping carts and social feeds often accept this.
+</Step>
+
+<Step>
+If the system favors **consistency** (the "C"), Node 2 refuses to answer, or returns an error, until it can confirm the latest value. Nothing wrong is ever returned, but part of the system is unavailable. Bank balances and inventory counts often need this. Remember that the choice only matters during a partition, and many systems let you tune it per operation, with models between the extremes such as *read-your-writes* or *causal* consistency.
+</Step>
+
+## Key takeaways
+
+- When the network partitions, a system must choose between consistency (refuse or fail) and availability (answer, possibly stale).
+- "Eventually consistent" means copies converge after the partition heals, not that data is wrong forever.
+- Choose per use case: stale is acceptable for a like count, not for an account balance.

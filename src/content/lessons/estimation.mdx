@@ -16,7 +16,7 @@ Next estimate what each user does. If the average user makes **10 requests a day
 </Step>
 
 <Step>
-Convert to **requests per second**, since that is what servers handle. A day has about 86,400 seconds, which you can round to 100,000 for mental math. 100 million ÷ 86,400 is about **1,157 requests per second** on average.
+Convert to **requests per second**, since that is what servers handle. A day has about 86,400 seconds, which you can round to 100,000 for mental math (that gives about 1,000). 100 million ÷ 86,400 is about **1,157 requests per second** on average.
 </Step>
 
 <Step>
@@ -28,7 +28,7 @@ Now storage. Suppose 1 in 10 requests writes about 1 KB of data. That is 10 mill
 </Step>
 
 <Step>
-What did we learn? About 3,500 requests per second is within reach of a small group of servers with a cache and a database, not a huge fleet, and a few terabytes per year is easily handled by modern disks. Estimation does not give you the design, but it tells you which designs are worth considering and which are overkill.
+What did we learn? About 3,500 requests per second is within reach of a small group of servers with a cache and a database, not a huge fleet, and about 11 TB per year with three copies fits on a handful of modern disks. Estimation does not give you the design, but it tells you which designs are worth considering and which are overkill.
 </Step>
 
 ## Key takeaways

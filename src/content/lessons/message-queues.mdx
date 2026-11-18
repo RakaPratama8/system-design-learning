@@ -28,7 +28,7 @@ When the queue keeps growing, add more consumers. Each takes messages from the s
 </Step>
 
 <Step>
-Failures are expected. If a consumer crashes before acknowledging, the queue **delivers the message again** to another consumer, so work is not lost. The consequence is that a message can sometimes be processed more than once, so consumers should be written to handle duplicates safely, which is covered in the idempotency lesson.
+Failures are expected. If a consumer crashes before acknowledging, the queue **delivers the message again** to another consumer, so work is not lost. The consequence is that a message can sometimes be processed more than once, so consumers should be **idempotent**: processing the same message twice must have the same effect as processing it once, for example by checking whether order 42 was already charged.
 </Step>
 
 ## Key takeaways

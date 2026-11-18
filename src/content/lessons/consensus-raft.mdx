@@ -1,0 +1,46 @@
+---
+title: Consensus and leader election (Raft)
+level: 3
+order: 23
+summary: How a group of machines agrees on one leader and one order of changes, even when some fail.
+---
+
+Many systems need a group of machines to agree on something: who is the leader, or what the next change to the data is. Doing this when machines can crash and messages can be delayed is called **consensus**. **Raft** is a consensus algorithm designed to be understandable. This lesson gives the intuition, not every detail.
+
+<Step>
+A Raft cluster is usually three or five nodes. At any moment each node is a **follower**, a **candidate**, or the **leader**. At first everyone is a follower, waiting to hear from a leader. Each follower has a randomized **election timeout**: if it hears nothing for that long, it will try to take over.
+</Step>
+
+<Step>
+Node A's timeout fires first, since the timeouts are random. It increases the **term** number (a counter for leadership periods), becomes a **candidate**, votes for itself, and sends a request for votes to the other nodes.
+</Step>
+
+<Step>
+Each node votes for at most **one candidate per term**. Node B has not voted yet in this term, so it grants its vote to A. Because each node votes once, two candidates cannot both gather a majority in the same term.
+</Step>
+
+<Step>
+A now has two votes out of three, which is a **majority**, so it becomes the **leader**. Majorities matter because any two majorities overlap in at least one node, which keeps the cluster from splitting into two groups that each think they are in charge.
+</Step>
+
+<Step>
+The leader sends periodic **heartbeats** to all followers. As long as they arrive in time, the followers stay followers. If heartbeats stop, the timeouts fire and a new election begins.
+</Step>
+
+<Step>
+All writes go through the leader. It adds the change to its **log** and sends it to the followers with an append request. The log is an ordered list, which is how all the nodes end up applying changes in the same order.
+</Step>
+
+<Step>
+When a **majority** of nodes have stored the entry, it is **committed**: it is guaranteed not to be lost, even if some nodes fail. Only then does the leader apply it and answer the client.
+</Step>
+
+<Step>
+Now the leader crashes. The followers stop receiving heartbeats, a new election happens, and a node with the up-to-date log wins. Every committed entry exists on a majority, so the new leader has it. This is how a small cluster keeps working while one node is down, and why clusters use an odd number of nodes: three tolerate one failure, five tolerate two.
+</Step>
+
+## Key takeaways
+
+- Raft elects one leader per term using random timeouts and majority votes.
+- The leader orders all writes in a log; an entry is committed once a majority stores it.
+- A cluster of 2f + 1 nodes keeps working with up to f failures. This is used by etcd, Consul, and many databases.

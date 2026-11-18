@@ -13,3 +13,5 @@ time	decision	reason	evidence	result
 2026-11-18T09:37	auth-sessions-tokens: JWT mentioned as the common token format; refresh tokens and OAuth are not covered	Keep within intuition level	lesson text	accepted
 2026-11-18T09:37	monolith-vs-microservices: states a balanced view rather than recommending microservices	Avoid a one-sided claim	lesson text	needs owner review
 2026-11-18T09:37	pub-sub: Kafka named as an example of an event streaming platform	Well-known example; no deep dive	lesson text	accepted
+2026-11-18T09:39	Skip: replication scene still draws primary->r2 after failover	Cosmetic; step caption explains failover	Level 2 accuracy review	deferred
+2026-11-18T09:39	rate-limiting sim: effective burst = max(burst, rate) because one tick is one second	A smaller bucket would cap steady traffic below the refill rate in a per-second model	sim test	done

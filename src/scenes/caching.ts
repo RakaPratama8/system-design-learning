@@ -11,7 +11,6 @@ const scene: Scene = {
   edges: [
     { from: 'client', to: 'app' },
     { from: 'app', to: 'cache' },
-    { from: 'cache', to: 'db' },
     { from: 'app', to: 'db' },
   ],
   steps: [

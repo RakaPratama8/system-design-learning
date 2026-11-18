@@ -19,7 +19,7 @@ const sim: Sim = {
     const dbLoad = traffic * (1 - hitRate);
     const routes: Route[] = [];
     if (on) routes.push({ path: ['client', 'app', 'cache'], weight: hitRate, outcome: 'ok' });
-    routes.push(...splitRoute(on ? ['client', 'app', 'cache', 'db'] : ['client', 'app', 'db'], 1 - hitRate, dbLoad, DB_CAPACITY));
+    routes.push(...splitRoute(on ? ['client', 'app', 'cache', 'app', 'db'] : ['client', 'app', 'db'], 1 - hitRate, dbLoad, DB_CAPACITY));
     return {
       states: {
         client: { status: 'ok' },

@@ -14,7 +14,8 @@ const sim: Sim = {
   ],
   run(values: ControlValues): SimResult {
     const rate = Math.max(0, Number(values.rate) || 0);
-    const burst = Math.max(0, Number(values.burst) || 0);
+    // One tick is a second: a bucket smaller than a second of refill would cap steady traffic below the refill rate.
+    const burst = Math.max(Math.max(0, Number(values.burst) || 0), rate);
     const traffic = Math.max(0, Number(values.traffic) || 0);
     const arrivals = Array.from({ length: TICKS }, (_, i) => (i === SPIKE_TICK ? traffic * 4 : traffic));
     const { allowed, rejected } = tokenBucket({ rate, burst, arrivals });
@@ -24,7 +25,11 @@ const sim: Sim = {
     return {
       states: {
         client: { status: 'ok' },
-        limiter: { status: rejectedTotal > 0 ? 'hot' : 'ok', fill: total === 0 ? 0 : rejectedTotal / total },
+        limiter: {
+          status: rejectedTotal > 0 ? 'hot' : 'ok',
+          fill: total === 0 ? 0 : rejectedTotal / total,
+          label: `${Math.round((total === 0 ? 0 : rejectedTotal / total) * 100)}% rejected`,
+        },
         api: { status: 'ok' },
       },
       readouts: [

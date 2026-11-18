@@ -25,7 +25,7 @@ Copying a change takes time, called **replication lag**: usually milliseconds, s
 </Step>
 
 <Step>
-Now the primary crashes. Replicas still hold the data, so nothing is lost, but nobody can accept writes. The application can keep reading from the replicas, which is already a big improvement over a single server that is simply gone.
+Now the primary crashes. Replicas still hold a copy of the data, apart from any very recent changes that had not reached them yet, but nobody can accept writes. The application can keep reading from the replicas, which is already a big improvement over a single server that is simply gone.
 </Step>
 
 <Step>

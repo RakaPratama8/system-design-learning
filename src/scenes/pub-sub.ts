@@ -47,7 +47,7 @@ const scene: Scene = {
       },
     },
     {
-      caption: 'Unlike a queue, where each message goes to one consumer, every subscriber gets its own copy.',
+      caption: 'Adding a reaction means adding a subscriber. Streaming systems can also keep events so new subscribers replay history.',
       highlight: ['topic'],
     },
   ],

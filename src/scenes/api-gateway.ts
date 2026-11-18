@@ -40,7 +40,7 @@ const scene: Scene = {
     {
       caption: 'The cost: every request takes one more hop, and the gateway must stay available or everything stops.',
       highlight: ['gw'],
-      states: { gw: { status: 'hot', fill: 0.9, label: 'busy' } },
+      states: { gw: { status: 'ok', label: 'one front door' } },
     },
   ],
 };

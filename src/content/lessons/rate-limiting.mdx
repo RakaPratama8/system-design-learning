@@ -21,7 +21,7 @@ Tokens are added back at a steady *refill rate*, for example 10 per second, but 
 </Step>
 
 <Step>
-Short bursts are allowed. A client can spend all the tokens in the bucket at once, so the burst size controls how large a spike is tolerated. A burst that is bigger than the bucket, or one that keeps going, drains it faster than it refills.
+Short bursts are allowed. A client can spend all the tokens in the bucket at once, so the burst size controls how large a spike is tolerated. Any traffic above the refill rate drains the bucket, and once it is empty the excess is rejected.
 </Step>
 
 <Step>
@@ -29,7 +29,7 @@ When the bucket is empty, the limiter **rejects** further requests, normally wit
 </Step>
 
 <TryIt>
-The model sends your chosen traffic every second for ten seconds, with one second carrying four times as much. Raise the traffic or lower the refill rate and watch the rejected count grow. Then increase the bucket size and see how a bigger burst allowance changes what gets through.
+The model sends your chosen traffic every second for ten seconds, with one second carrying four times as much. Raise the traffic or lower the refill rate and watch the rejected count grow. Then increase the bucket size and see how a bigger burst allowance changes what gets through. In this view the bar and its label show the share of requests that were rejected.
 </TryIt>
 
 ## Key takeaways

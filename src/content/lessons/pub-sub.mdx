@@ -20,7 +20,7 @@ When an event arrives, the topic delivers **a copy to every subscriber**. This i
 </Step>
 
 <Step>
-Subscribers are independent. If analytics is down or slow, the other services are unaffected, and in most systems the topic keeps the events for the stalled subscriber to catch up later. This isolation is a major reason systems are built this way.
+Subscribers are independent. If analytics is down or slow, the other services are unaffected, and in durable systems (with persistent subscriptions or an event log) the events are kept so the stalled subscriber can catch up later. Simple pub/sub, such as Redis pub/sub, drops events for subscribers that are offline. This isolation is a major reason systems are built this way.
 </Step>
 
 <Step>

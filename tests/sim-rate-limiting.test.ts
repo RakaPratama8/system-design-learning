@@ -34,4 +34,14 @@ describe('rate limiting sim', () => {
     const allowed = run().routes.find((x) => x.outcome === 'ok')!;
     expect(allowed.path).toEqual(['client', 'limiter', 'api']);
   });
+
+  it('does not under-serve steady traffic when the bucket is smaller than one second of refill', () => {
+    const r = run({ rate: 50, burst: 1, traffic: 10 });
+    expect(readout(r, 'Rejected (429)')).toBe('0');
+  });
+
+  it('labels the limiter bar with the share of requests rejected', () => {
+    expect(run().states.limiter.label).toBe('44% rejected');
+    expect(run({ traffic: 0 }).states.limiter.label).toBe('0% rejected');
+  });
 });
