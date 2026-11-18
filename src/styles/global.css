@@ -154,3 +154,10 @@ a { color: var(--accent); }
 .scene .node[data-status='down'] rect.tile { stroke: var(--down); }
 .scene .node[data-status='down'] .icon { opacity: 0.45; }
 .scene .node .lbl { font-size: 10px; }
+
+.seq .node rect.tile { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+.seq .node[data-status='hot'] rect.tile { stroke: var(--hot); }
+.seq .node[data-status='down'] rect.tile { stroke: var(--down); }
+.seq .node[data-status='down'] .icon { opacity: 0.45; }
+.seq .node .lbl { font-size: 10px; fill: var(--text); font-family: var(--font); }
+.seq .node .sub { font-size: 9px; fill: var(--muted); font-family: var(--font); }
