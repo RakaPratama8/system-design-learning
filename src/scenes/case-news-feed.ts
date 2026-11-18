@@ -41,11 +41,7 @@ const scene: Scene = {
     {
       caption: 'The problem: a celebrity with millions of followers turns every post into millions of writes.',
       highlight: ['svc'],
-      states: {
-        svc: { status: 'hot', fill: 1, label: 'millions of writes' },
-        f1: { status: 'hot', fill: 1 },
-        f2: { status: 'hot', fill: 1 },
-      },
+      states: { svc: { status: 'hot', fill: 1, label: 'millions of writes' } },
     },
     {
       caption: 'A common compromise: fan out on write for ordinary users, and merge celebrity posts into the feed at read time.',

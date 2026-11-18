@@ -8,7 +8,7 @@ summary: Spread keys over servers so that adding or removing a server moves as l
 When data or requests are spread across many servers (shards or cache nodes), you need a rule for which server owns which key. The obvious rule has a hidden problem, and consistent hashing is the fix.
 
 <Step>
-The obvious rule is `server = hash(key) mod N`, where N is the number of servers. It spreads keys evenly, but when N changes, say from 3 to 4, the result changes for almost every key, so nearly all data must move or all cached entries become misses at once. Consistent hashing avoids this. Imagine the output of the hash function as a **ring**. Both servers and keys are hashed onto the ring, and each key belongs to the first server found going clockwise from it.
+The obvious rule is `server = hash(key) mod N`, where N is the number of servers. It spreads keys evenly, but when N changes, say from 3 to 4, the result changes for most keys (about 3 in 4), so most data must move or all cached entries become misses at once. Consistent hashing avoids this. Imagine the output of the hash function as a **ring**. Both servers and keys are hashed onto the ring, and each key belongs to the first server found going clockwise from it.
 </Step>
 
 <Step>
@@ -24,15 +24,15 @@ Now the system grows: **Server D joins the ring**, hashed to a position between 
 </Step>
 
 <Step>
-Only the keys in the stretch that D now owns need to move to it, which are the keys that were previously assigned to A but sit just before D on the ring. Key 2 is one of them, while Key 1 stays on B. On average only about 1/N of the keys move, instead of nearly all of them. Removing a server works the same way in reverse: its keys pass to the next server clockwise.
+Only the keys in the stretch that D now owns need to move to it, which are the keys that were previously assigned to A but sit just before D on the ring. Key 2 is one of them, while Key 1 stays on B. On average only about 1/N of the keys move, instead of most of them. Removing a server works the same way in reverse: its keys pass to the next server clockwise.
 </Step>
 
 <Step>
-Placing each server at one point can leave an uneven split. Real implementations therefore give each server **many points on the ring**, called virtual nodes. This evens out the load, and also lets a stronger machine own more of the ring. This technique is used in caches, in sharded databases such as Cassandra and DynamoDB, and in load balancers.
+Placing each server at one point can leave an uneven split. Real implementations therefore give each server **many points on the ring**, called virtual nodes. This evens out the load, and also lets a stronger machine own more of the ring. This technique is used in caches, in sharded databases such as Cassandra and Amazon's Dynamo, and in load balancers.
 </Step>
 
 ## Key takeaways
 
 - Hash servers and keys onto a ring; a key belongs to the next server clockwise.
-- Adding or removing a server moves only about 1/N of the keys, unlike `hash mod N`, which moves nearly all.
+- Adding or removing a server moves only about 1/N of the keys, unlike `hash mod N`, which moves most keys.
 - Virtual nodes smooth the distribution and let servers take shares matching their capacity.

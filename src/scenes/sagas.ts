@@ -27,7 +27,7 @@ const scene: Scene = {
       states: { inventory: { status: 'hot', label: 'out of stock' } },
     },
     {
-      caption: 'There is no global rollback across services, so the saga runs a compensating action: refund the payment.',
+      caption: 'No single transaction spans these services, so the saga runs a compensating action: refund the payment.',
       message: { from: 'order', to: 'payment', label: 'refund' },
       states: { payment: { status: 'ok', label: 'refunded' } },
     },

@@ -7,8 +7,8 @@ const scene: Scene = {
     { id: 'sb', label: 'Server B', x: 345, y: 100 },
     { id: 'sc', label: 'Server C', x: 200, y: 156 },
     { id: 'sd', label: 'Server D', x: 50, y: 100 },
-    { id: 'k1', label: 'Key 1', x: 270, y: 100 },
-    { id: 'k2', label: 'Key 2', x: 130, y: 100 },
+    { id: 'k1', label: 'Key 1', x: 300, y: 58 },
+    { id: 'k2', label: 'Key 2', x: 95, y: 150 },
   ],
   edges: [
     { from: 'sa', to: 'sb' },
@@ -21,8 +21,8 @@ const scene: Scene = {
   ],
   steps: [
     {
-      caption: 'Place servers and keys on the same ring. Each key belongs to the first server clockwise from it.',
-      highlight: ['sa>sb', 'sb>sc', 'sc>sd', 'sd>sa'],
+      caption: 'Place servers and keys on the same ring. Each key belongs to the first server clockwise from it. (Server D is greyed; it joins later.)',
+      highlight: ['sa>sb', 'sb>sc'],
       states: { sd: { status: 'ok', label: 'not added yet' } },
     },
     {

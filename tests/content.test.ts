@@ -90,3 +90,39 @@ describe('lessons', () => {
     }
   });
 });
+
+describe('curriculum', () => {
+  const lessons = files.map((f) => {
+    const text = readFileSync(join(dir, f), 'utf8');
+    return {
+      slug: slugOf(f),
+      level: Number(/^level:\s*(\d)/m.exec(text)?.[1]),
+      order: Number(/^order:\s*(\d+)/m.exec(text)?.[1]),
+      poke: /^poke:\s*true/m.test(text),
+    };
+  });
+
+  it('has 29 lessons: 9 foundations, 10 intermediate, 10 advanced', () => {
+    expect(lessons).toHaveLength(29);
+    expect([1, 2, 3].map((l) => lessons.filter((x) => x.level === l).length)).toEqual([9, 10, 10]);
+  });
+
+  it('numbers lessons 1..9, 10..19 and 20..29 without gaps or repeats', () => {
+    const orders = lessons.map((x) => x.order).sort((a, b) => a - b);
+    expect(orders).toEqual(Array.from({ length: 29 }, (_, i) => i + 1));
+    for (const x of lessons) expect(x.level, x.slug).toBe(x.order <= 9 ? 1 : x.order <= 19 ? 2 : 3);
+  });
+
+  it('has live Try it exactly on the five trade-off topics', () => {
+    expect(lessons.filter((x) => x.poke).map((x) => x.slug).sort()).toEqual(
+      ['caching', 'load-balancers', 'rate-limiting', 'replication', 'sharding'],
+    );
+  });
+
+  it('uses every scene type at least once', () => {
+    expect(new Set(Object.values(scenes).map((s) => s.type))).toEqual(
+      new Set(['graph', 'sequence', 'compare', 'numbers']),
+    );
+  });
+});
+

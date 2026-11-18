@@ -36,7 +36,8 @@ const scene: Scene = {
       message: { from: 'n2', to: 'client', label: 'x = 2 (stale)' },
     },
     {
-      caption: 'Choose consistency: Node 2 refuses to answer until it can reach Node 1. The answer is never wrong, but the system is unavailable.',
+      caption: 'The other choice, consistency: instead of that stale answer, Node 2 refuses until it can reach Node 1. The answer is never wrong, but this part of the system is unavailable.',
+      message: { from: 'n2', to: 'client', label: 'error: unavailable' },
       states: { n2: { status: 'down', label: 'refuses' } },
     },
   ],

@@ -24,7 +24,7 @@ A URL shortener turns `https://example.com/some/very/long/page?id=123` into some
 </Step>
 
 <Step>
-On a **miss** the app reads the database, stores the result in the cache, and returns an HTTP **redirect**. A `301` (permanent) redirect lets browsers remember it, which reduces load but means you never see repeat visits, while `302` (temporary) sends every visit through your service, which lets you count clicks. Choose according to whether you need analytics.
+On a **miss** the app reads the database, stores the result in the cache, and returns an HTTP **redirect**. A `301` (permanent) redirect lets browsers remember it, which reduces load but means you stop seeing repeat visits from browsers that cached it, while `302` (temporary) sends every visit through your service, which lets you count clicks. Choose according to whether you need analytics.
 </Step>
 
 <Step>

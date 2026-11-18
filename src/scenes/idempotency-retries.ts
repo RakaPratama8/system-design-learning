@@ -21,7 +21,7 @@ const scene: Scene = {
       states: { server: { status: 'down', label: 'charged twice' }, client: { status: 'ok', label: 'retrying' } },
     },
     {
-      caption: 'The fix: the client attaches a unique idempotency key to the request. The server processes it and stores the result under that key.',
+      caption: 'The fix: the client attaches a unique idempotency key to the request. The server records the key together with the result of the charge.',
       message: { from: 'client', to: 'server', label: 'pay, key K1' },
       states: { server: { status: 'ok', label: 'stores K1' }, client: { status: 'ok', label: 'key K1' } },
     },

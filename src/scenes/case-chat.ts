@@ -38,12 +38,12 @@ const scene: Scene = {
     {
       caption: 'If Bob is offline, the message waits in the store and a push notification is sent to his phone.',
       marker: ['gw', 'push'],
-      states: { bob: { status: 'down', label: 'offline' }, push: { status: 'ok', fill: 0.3 } },
+      states: { gw: { status: 'ok', label: '1 online' }, bob: { status: 'down', label: 'offline' }, push: { status: 'ok', fill: 0.3 } },
     },
     {
       caption: 'When Bob reconnects, he asks for everything after the last message he saw.',
       marker: ['bob', 'gw', 'store'],
-      states: { bob: { status: 'ok', label: 'syncing' } },
+      states: { gw: { status: 'ok', label: '2 online' }, bob: { status: 'ok', label: 'syncing' } },
     },
   ],
 };

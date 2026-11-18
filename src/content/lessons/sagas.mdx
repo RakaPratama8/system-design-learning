@@ -5,7 +5,7 @@ order: 24
 summary: How to complete a multi-step business action across services that each own their own database.
 ---
 
-In a single database, a **transaction** makes several changes succeed or fail together. When an action spans several services, each with its own database, no single transaction can cover them. A **saga** is a common way to keep such an action correct anyway.
+In a single database, a **transaction** makes several changes succeed or fail together. When an action spans several services, each with its own database, an ordinary local transaction cannot cover them. Distributed protocols such as two-phase commit exist, but they are slow and can block if the coordinator fails, so many systems use a **saga** instead to keep such an action correct.
 
 <Step>
 Placing an order needs several steps in different services: charge the card, reserve the stock, schedule the shipping. A saga runs them **one after another as a sequence of local transactions**, each in one service. The first step: the Order service asks Payment to charge the card.

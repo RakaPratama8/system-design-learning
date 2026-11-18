@@ -20,7 +20,7 @@ Since the client cannot know, the safest-looking choice is to try again. If the 
 </Step>
 
 <Step>
-An operation is **idempotent** if doing it several times has the same effect as doing it once. Reading data and "set the price to 10" are naturally idempotent. "Add $10 to the balance" is not. To make such operations safe, the client sends an **idempotency key**: a unique id, such as a random UUID, that it chooses once per logical action. The server performs the work and stores the result under that key.
+An operation is **idempotent** if doing it several times has the same effect as doing it once. Reading data and "set the price to 10" are naturally idempotent. "Add $10 to the balance" is not. To make such operations safe, the client sends an **idempotency key**: a unique id, such as a random UUID, that it chooses once per logical action. The server records the key together with the result, ideally in the same database transaction as the charge, so that a retry arriving during or after the work is recognized.
 </Step>
 
 <Step>

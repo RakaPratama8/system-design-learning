@@ -17,7 +17,7 @@ const scene: Scene = {
       },
     },
     {
-      caption: "Node A's timer runs out first. It becomes a candidate for a new term and asks the others for votes.",
+      caption: "Node A's timer runs out first. It becomes a candidate for a new term and asks the others for votes (the request to B is shown).",
       message: { from: 'a', to: 'b', label: 'vote for me' },
       states: { a: { status: 'ok', label: 'candidate' } },
     },
