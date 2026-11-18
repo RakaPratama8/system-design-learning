@@ -16,6 +16,7 @@ npm run e2e      # Playwright scroll/Try it tests (needs Google Chrome installed
 A lesson is text plus a scene file. No UI code is needed.
 
 1. `src/scenes/<slug>.ts`: default-export a `Scene` (see `src/engine/types.ts`). Four types share one player: `graph` (boxes and arrows with a travelling marker), `sequence` (lanes and messages over time), `compare` (two small graphs side by side), `numbers` (bars).
+   Every graph node and every sequence lane needs an `icon` from the vocabulary in `src/engine/icons.ts` (phone, server, database, cache, balancer, queue and so on). Nodes are drawn as a 36px icon tile with the label underneath, so keep node centers at least 72px apart horizontally or 52px vertically, with x between 36 and 364 and y between 32 and 160. The validator reports anything that does not fit.
 2. `src/content/lessons/<slug>.mdx`: frontmatter `title`, `level` (1-3), `order`, `summary` (quote values that contain a colon), then **one `<Step>` block per scene step**, then a "Key takeaways" section.
 3. Run `npm run verify`. `tests/content.test.ts` checks the scene is valid (known node ids, edges and marker paths, layout bounds, label length), that the step count matches, and that the curriculum totals still hold.
 

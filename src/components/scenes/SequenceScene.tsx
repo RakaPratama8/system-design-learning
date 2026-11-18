@@ -6,8 +6,7 @@ export function SequenceSceneView({ frame }: { frame: SequenceFrame }) {
   const x = (id: string) => frame.lanes.find((l) => l.id === id)!.x;
   return (
     <svg className="scene seq" viewBox="0 0 400 200" role="img" aria-label={frame.caption}>
-      {frame.lanes.map((l) =>
-        l.icon ? (
+      {frame.lanes.map((l) => (
           <g key={l.id} data-node={l.id} data-status={l.state.status} className="node">
             <line className="lane" x1={l.x} y1={66} x2={l.x} y2={195} />
             <rect className="tile" x={l.x - TILE / 2} y={4} width={TILE} height={TILE} rx={8} />
@@ -15,15 +14,7 @@ export function SequenceSceneView({ frame }: { frame: SequenceFrame }) {
             <text className="lbl" x={l.x} y={52} textAnchor="middle">{l.label}</text>
             {l.state.label && <text className="sub" x={l.x} y={62} textAnchor="middle">{l.state.label}</text>}
           </g>
-        ) : (
-        <g key={l.id} data-node={l.id} data-status={l.state.status} className="node">
-          <line className="lane" x1={l.x} y1={36} x2={l.x} y2={195} />
-          <rect x={l.x - 32} y={6} width={64} height={28} rx={6} />
-          <text x={l.x} y={24} textAnchor="middle">{l.label}</text>
-          {l.state.label && <text className="sub" x={l.x} y={46} textAnchor="middle">{l.state.label}</text>}
-        </g>
-        ),
-      )}
+        ))}
       {frame.messages.map((m, i) => {
         const x1 = x(m.from);
         const x2 = x(m.to);

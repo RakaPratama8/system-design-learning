@@ -2,9 +2,6 @@ import type { GraphFrame } from '../../engine/frames/graph';
 import { TILE } from '../../engine/layout';
 import { Icon } from '../icons/Icon';
 
-const W = 72;
-const H = 32;
-
 export function GraphSceneView({ frame }: { frame: GraphFrame }) {
   const at = (id: string) => frame.nodes.find((n) => n.id === id)!;
   const notable = frame.nodes
@@ -23,8 +20,7 @@ export function GraphSceneView({ frame }: { frame: GraphFrame }) {
           y2={at(e.to).y}
         />
       ))}
-      {frame.nodes.map((n) =>
-        n.icon ? (
+      {frame.nodes.map((n) => (
           <g key={n.id} data-node={n.id} data-status={n.state.status} className={n.highlighted ? 'node on' : 'node'}>
             {n.state.label && (
               <text className="sub" x={n.x} y={n.y - TILE / 2 - 4} textAnchor="middle">
@@ -40,30 +36,7 @@ export function GraphSceneView({ frame }: { frame: GraphFrame }) {
               <rect className="fill" x={n.x - 24} y={n.y + TILE / 2 + 16} width={48 * n.state.fill} height={4} rx={2} />
             )}
           </g>
-        ) : (
-        <g key={n.id} data-node={n.id} data-status={n.state.status} className={n.highlighted ? 'node on' : 'node'}>
-          <rect x={n.x - W / 2} y={n.y - H / 2} width={W} height={H} rx={6} />
-          {n.state.fill !== undefined && (
-            <rect
-              className="fill"
-              x={n.x - W / 2 + 4}
-              y={n.y + H / 2 - 8}
-              width={(W - 8) * n.state.fill}
-              height={4}
-              rx={2}
-            />
-          )}
-          <text x={n.x} y={n.y - (n.state.fill !== undefined ? 2 : -4)} textAnchor="middle">
-            {n.label}
-          </text>
-          {n.state.label && (
-            <text className="sub" x={n.x} y={n.y - H / 2 - 4} textAnchor="middle">
-              {n.state.label}
-            </text>
-          )}
-        </g>
-        ),
-      )}
+        ))}
       {frame.marker && <circle data-marker="" className="marker" cx={frame.marker.x} cy={frame.marker.y} r={5} />}
     </svg>
   );

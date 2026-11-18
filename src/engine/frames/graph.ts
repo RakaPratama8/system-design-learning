@@ -6,7 +6,7 @@ import { displayedStates } from './shared';
 export type GraphBodyWithSteps = Pick<GraphScene, 'nodes' | 'edges' | 'steps'>;
 
 export interface GraphFrame {
-  nodes: { id: string; label: string; x: number; y: number; icon?: IconName; state: NodeState; highlighted: boolean }[];
+  nodes: { id: string; label: string; x: number; y: number; icon: IconName; state: NodeState; highlighted: boolean }[];
   edges: { from: string; to: string; id: string; highlighted: boolean }[];
   marker?: Point;
   caption: string;

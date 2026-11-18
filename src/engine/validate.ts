@@ -2,9 +2,6 @@ import { isIconName } from './icons';
 import { ICON_NODE_H, ICON_NODE_W, ICON_Y_MAX, ICON_Y_MIN } from './layout';
 import type { GraphBody, GraphStepBody, NodeState, Scene } from './types';
 
-// Keep in sync with the node box drawn in components/scenes/GraphScene.tsx (viewBox 0 0 400 200).
-export const NODE_W = 72;
-export const NODE_H = 32;
 export const LABEL_MAX = 12;
 
 function checkStates(prefix: string, i: number, states: Record<string, NodeState> | undefined, known: Set<string>, errors: string[]) {
@@ -20,17 +17,15 @@ function checkGraph(prefix: string, body: GraphBody, steps: GraphStepBody[], err
     if (ids.has(n.id)) errors.push(`${prefix}duplicate node id ${n.id}`);
     ids.add(n.id);
     if (n.label.length > LABEL_MAX) errors.push(`${prefix}label of ${n.id} is longer than ${LABEL_MAX} characters`);
-    if (n.icon !== undefined && !isIconName(n.icon)) errors.push(`${prefix}node ${n.id} has unknown icon ${n.icon}`);
-    const [yMin, yMax] = n.icon !== undefined ? [ICON_Y_MIN, ICON_Y_MAX] : [36, 184];
-    if (n.x < NODE_W / 2 || n.x > 400 - NODE_W / 2 || n.y < yMin || n.y > yMax) {
-      errors.push(`${prefix}node ${n.id} is out of bounds (x ${NODE_W / 2}..${400 - NODE_W / 2}, y ${yMin}..${yMax})`);
+    if (!n.icon) errors.push(`${prefix}node ${n.id} is missing an icon`);
+    else if (!isIconName(n.icon)) errors.push(`${prefix}node ${n.id} has unknown icon ${n.icon}`);
+    if (n.x < ICON_NODE_W / 2 || n.x > 400 - ICON_NODE_W / 2 || n.y < ICON_Y_MIN || n.y > ICON_Y_MAX) {
+      errors.push(`${prefix}node ${n.id} is out of bounds (x ${ICON_NODE_W / 2}..${400 - ICON_NODE_W / 2}, y ${ICON_Y_MIN}..${ICON_Y_MAX})`);
     }
   }
   body.nodes.forEach((a, i) => {
     for (const b of body.nodes.slice(i + 1)) {
-      const w = a.icon !== undefined || b.icon !== undefined ? ICON_NODE_W : NODE_W;
-      const h = a.icon !== undefined || b.icon !== undefined ? ICON_NODE_H : NODE_H;
-      if (Math.abs(a.x - b.x) < w && Math.abs(a.y - b.y) < h) errors.push(`${prefix}nodes ${a.id} and ${b.id} overlap`);
+      if (Math.abs(a.x - b.x) < ICON_NODE_W && Math.abs(a.y - b.y) < ICON_NODE_H) errors.push(`${prefix}nodes ${a.id} and ${b.id} overlap`);
     }
   });
   const edgeIds = new Set<string>();
@@ -66,7 +61,8 @@ export function validateScene(scene: Scene): string[] {
       const lanes = new Set(scene.lanes.map((l) => l.id));
       for (const l of scene.lanes) {
         if (l.label.length > LABEL_MAX) errors.push(`label of lane ${l.id} is longer than ${LABEL_MAX} characters`);
-        if (l.icon !== undefined && !isIconName(l.icon)) errors.push(`lane ${l.id} has unknown icon ${l.icon}`);
+        if (!l.icon) errors.push(`lane ${l.id} is missing an icon`);
+        else if (!isIconName(l.icon)) errors.push(`lane ${l.id} has unknown icon ${l.icon}`);
       }
       scene.steps.forEach((s, i) => {
         for (const end of s.message ? [s.message.from, s.message.to] : []) {

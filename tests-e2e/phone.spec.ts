@@ -25,3 +25,10 @@ test('compare scenes stack their two sides on a phone', async ({ page }) => {
   expect(l.width).toBeGreaterThanOrEqual(300);
   expect(r.y).toBeGreaterThanOrEqual(l.y + l.height - 1);
 });
+
+test('icon tiles stay at least 24px wide in a compare scene on a phone', async ({ page }) => {
+  await page.goto('/lessons/sql-vs-nosql');
+  await scrollToBlock(page, 1);
+  const tile = (await page.locator('.compare rect.tile').first().boundingBox())!;
+  expect(tile.width).toBeGreaterThanOrEqual(24);
+});

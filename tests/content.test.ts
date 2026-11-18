@@ -91,24 +91,14 @@ describe('lessons', () => {
   });
 });
 
-// Scenes migrated to icons so far (Tasks 6-8 grow this list; Task 9 checks every scene).
-const ICONIZED = [
-  'client-server', 'dns', 'http-request-lifecycle', 'apis-rest', 'sql-vs-nosql',
-  'scaling-vertical-horizontal', 'load-balancers',
-  'caching', 'cdn', 'replication', 'message-queues', 'pub-sub', 'rate-limiting', 'api-gateway',
-  'monolith-vs-microservices', 'auth-sessions-tokens',
-  'sharding', 'consistent-hashing', 'cap-consistency', 'consensus-raft', 'sagas', 'idempotency-retries',
-  'observability', 'case-url-shortener', 'case-news-feed', 'case-chat',
-];
-
 describe('icons', () => {
   const components = (s: (typeof scenes)[string]) =>
     s.type === 'graph' ? s.nodes : s.type === 'compare' ? [...s.left.nodes, ...s.right.nodes] : s.type === 'sequence' ? s.lanes : [];
-  for (const slug of ICONIZED) {
-    it(`every node and lane in ${slug} has an icon`, () => {
-      for (const c of components(scenes[slug])) expect(c.icon, `${slug}: ${c.id}`).toBeDefined();
-    });
-  }
+  it('every node and lane in every scene has an icon', () => {
+    for (const [slug, s] of Object.entries(scenes)) {
+      for (const c of components(s)) expect(c.icon, `${slug}: ${c.id}`).toBeDefined();
+    }
+  });
 });
 
 describe('curriculum', () => {

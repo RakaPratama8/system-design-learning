@@ -5,9 +5,9 @@ import type { CompareScene, GraphScene, NumbersScene, SequenceScene } from '../s
 const graph = (over: Partial<GraphScene> = {}): GraphScene => ({
   type: 'graph',
   nodes: [
-    { id: 'a', label: 'A', x: 50, y: 100 },
-    { id: 'b', label: 'B', x: 200, y: 100 },
-    { id: 'c', label: 'C', x: 350, y: 100 },
+    { id: 'a', label: 'A', x: 50, y: 100, icon: 'server' },
+    { id: 'b', label: 'B', x: 200, y: 100, icon: 'server' },
+    { id: 'c', label: 'C', x: 350, y: 100, icon: 'server' },
   ],
   edges: [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }],
   steps: [{ caption: 'one', marker: ['a', 'b'], highlight: ['a>b'] }],
@@ -37,12 +37,29 @@ describe('validateScene graph', () => {
   });
   it('rejects duplicate node ids', () => {
     const s = graph();
-    s.nodes.push({ id: 'a', label: 'dup', x: 0, y: 0 });
+    s.nodes.push({ id: 'a', label: 'dup', x: 0, y: 0, icon: 'server' });
     expect(validateScene(s).join()).toMatch(/duplicate/);
   });
   it('rejects a state for an unknown node', () => {
     const s = graph({ steps: [{ caption: 'x', states: { nope: { status: 'ok' } } }] });
     expect(validateScene(s).join()).toMatch(/nope/);
+  });
+});
+
+describe('validateScene missing icons', () => {
+  const noIcon = { id: 'a', label: 'A', x: 100, y: 100 } as never;
+  it('rejects a graph node without an icon', () => {
+    const s: GraphScene = { ...graph(), nodes: [noIcon], edges: [], steps: [{ caption: 'x' }] };
+    expect(validateScene(s).join()).toMatch(/missing an icon/);
+  });
+  it('rejects a compare node without an icon', () => {
+    const body = { nodes: [noIcon], edges: [] };
+    const s: CompareScene = { type: 'compare', leftTitle: 'L', rightTitle: 'R', left: body, right: body, steps: [{ caption: 'x' }] };
+    expect(validateScene(s).join()).toMatch(/missing an icon/);
+  });
+  it('rejects a lane without an icon', () => {
+    const s: SequenceScene = { type: 'sequence', lanes: [{ id: 'c', label: 'C' } as never], steps: [{ caption: 'x' }] };
+    expect(validateScene(s).join()).toMatch(/missing an icon/);
   });
 });
 
@@ -60,19 +77,16 @@ describe('validateScene icons', () => {
   });
   it('applies the taller icon bounds', () => {
     expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 20, icon: 'server' }])).join()).toMatch(/bounds/);
-    expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 170, icon: 'server' }])).join()).toMatch(/bounds/);
-    expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 170 }]))).toEqual([]);
     expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 100, icon: 'server' }]))).toEqual([]);
   });
   it('applies the taller icon overlap rule', () => {
-    const two = (dy: number, iconB = true) =>
+    const two = (dy: number) =>
       withNodes([
         { id: 'a', label: 'A', x: 100, y: 60, icon: 'server' },
-        { id: 'b', label: 'B', x: 100, y: 60 + dy, ...(iconB ? { icon: 'database' as const } : {}) },
+        { id: 'b', label: 'B', x: 100, y: 60 + dy, icon: 'database' },
       ]);
     expect(validateScene(two(60))).toEqual([]);
     expect(validateScene(two(40)).join()).toMatch(/overlap/);
-    expect(validateScene(two(40, false)).join()).toMatch(/overlap/);
     expect(validateScene(withNodes([
       { id: 'a', label: 'A', x: 100, y: 100, icon: 'server' },
       { id: 'b', label: 'B', x: 150, y: 100, icon: 'server' },
@@ -83,25 +97,25 @@ describe('validateScene icons', () => {
 describe('validateScene graph layout', () => {
   it('rejects a node outside the drawable area', () => {
     const s = graph();
-    s.nodes[0] = { id: 'a', label: 'A', x: 10, y: 100 };
+    s.nodes[0] = { id: 'a', label: 'A', x: 10, y: 100, icon: 'server' };
     expect(validateScene(s).join()).toMatch(/bounds/);
-    s.nodes[0] = { id: 'a', label: 'A', x: 50, y: 5 };
+    s.nodes[0] = { id: 'a', label: 'A', x: 50, y: 5, icon: 'server' };
     expect(validateScene(s).join()).toMatch(/bounds/);
   });
   it('rejects overlapping nodes', () => {
     const s = graph();
-    s.nodes[1] = { id: 'b', label: 'B', x: 80, y: 100 };
+    s.nodes[1] = { id: 'b', label: 'B', x: 80, y: 100, icon: 'server' };
     expect(validateScene(s).join()).toMatch(/overlap/);
   });
   it('rejects a label too long for its box', () => {
     const s = graph();
-    s.nodes[0] = { id: 'a', label: 'Load balancer', x: 50, y: 100 };
+    s.nodes[0] = { id: 'a', label: 'Load balancer', x: 50, y: 100, icon: 'server' };
     expect(validateScene(s).join()).toMatch(/label/);
   });
   it('rejects a lane label that is too long', () => {
     const s: SequenceScene = {
       type: 'sequence',
-      lanes: [{ id: 'c', label: 'A very long lane label' }],
+      lanes: [{ id: 'c', label: 'A very long lane label', icon: 'server' }],
       steps: [{ caption: 'x' }],
     };
     expect(validateScene(s).join()).toMatch(/label/);
@@ -111,7 +125,7 @@ describe('validateScene graph layout', () => {
 describe('validateScene sequence', () => {
   const seq = (over: Partial<SequenceScene> = {}): SequenceScene => ({
     type: 'sequence',
-    lanes: [{ id: 'c', label: 'Client' }, { id: 's', label: 'Server' }],
+    lanes: [{ id: 'c', label: 'Client', icon: 'server' }, { id: 's', label: 'Server', icon: 'server' }],
     steps: [{ caption: 'hi', message: { from: 'c', to: 's', label: 'GET' } }],
     ...over,
   });

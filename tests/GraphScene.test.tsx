@@ -7,8 +7,8 @@ afterEach(cleanup);
 
 const frame = (over: Partial<GraphFrame> = {}): GraphFrame => ({
   nodes: [
-    { id: 'a', label: 'Client', x: 50, y: 100, state: { status: 'ok' }, highlighted: false },
-    { id: 'b', label: 'Server', x: 300, y: 100, state: { status: 'down' }, highlighted: true },
+    { id: 'a', label: 'Client', x: 50, y: 100, icon: 'laptop', state: { status: 'ok' }, highlighted: false },
+    { id: 'b', label: 'Server', x: 300, y: 100, icon: 'server', state: { status: 'down' }, highlighted: true },
   ],
   edges: [{ from: 'a', to: 'b', id: 'a>b', highlighted: true }],
   caption: 'cap',
@@ -52,12 +52,6 @@ describe('GraphSceneView', () => {
     );
     expect(container.querySelector('[data-node="a"] rect.fill')).not.toBeNull();
     expect(getByText('busy')).toBeTruthy();
-  });
-
-  it('keeps the legacy box for a node without an icon', () => {
-    const { container } = render(<GraphSceneView frame={iconFrame({ icon: undefined })} />);
-    expect(container.querySelector('g[data-icon]')).toBeNull();
-    expect(container.querySelector('rect.tile')).toBeNull();
   });
 
   it('marks a down icon node with its status', () => {

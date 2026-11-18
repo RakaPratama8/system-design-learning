@@ -5,9 +5,9 @@ import type { GraphScene } from '../src/engine/types';
 const scene: GraphScene = {
   type: 'graph',
   nodes: [
-    { id: 'a', label: 'A', x: 0, y: 0 },
-    { id: 'b', label: 'B', x: 100, y: 0 },
-    { id: 'c', label: 'C', x: 200, y: 0 },
+    { id: 'a', label: 'A', x: 0, y: 0, icon: 'server' },
+    { id: 'b', label: 'B', x: 100, y: 0, icon: 'server' },
+    { id: 'c', label: 'C', x: 200, y: 0, icon: 'server' },
   ],
   edges: [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }],
   steps: [
@@ -53,11 +53,11 @@ describe('buildGraphFrame', () => {
   it('passes a node icon through to the frame', () => {
     const s: GraphScene = {
       ...scene,
-      nodes: [{ ...scene.nodes[0], icon: 'server' }, ...scene.nodes.slice(1)],
+      nodes: [{ ...scene.nodes[0], icon: 'database' }, ...scene.nodes.slice(1)],
     };
     const f = buildGraphFrame(s, 0, 0, false);
-    expect(node(f, 'a').icon).toBe('server');
-    expect(node(f, 'b').icon).toBeUndefined();
+    expect(node(f, 'a').icon).toBe('database');
+    expect(node(f, 'b').icon).toBe('server');
   });
 });
 

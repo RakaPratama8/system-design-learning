@@ -3,7 +3,7 @@ import { buildCompareFrame } from '../src/engine/frames/compare';
 import type { CompareScene } from '../src/engine/types';
 
 const body = {
-  nodes: [{ id: 'a', label: 'A', x: 50, y: 100 }, { id: 'b', label: 'B', x: 150, y: 100 }],
+  nodes: [{ id: 'a', label: 'A', x: 50, y: 100, icon: 'server' as const }, { id: 'b', label: 'B', x: 150, y: 100, icon: 'server' as const }],
   edges: [{ from: 'a', to: 'b' }],
 };
 const scene: CompareScene = {
