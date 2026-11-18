@@ -1,0 +1,43 @@
+---
+title: Database replication
+level: 2
+order: 12
+summary: Keep copies of your data so reads scale and a failure does not lose the database.
+poke: true
+---
+
+One database server is both a bottleneck and a single point of failure. **Replication** keeps extra copies of the data on other servers, which helps with both problems.
+
+<Step>
+In the most common setup there is one **primary** (also called the leader). Every write, such as creating an order or changing a profile, goes to the primary. Having one place that accepts writes keeps the data consistent, because there is one authority deciding the order of changes.
+</Step>
+
+<Step>
+The primary records each change and sends it to its **replicas**, which apply the same change to their own copy. After a short while all replicas hold the same data as the primary.
+</Step>
+
+<Step>
+Replicas can answer **reads**. Most applications read far more than they write, so spreading reads across several replicas lets the system handle much more read traffic than one server could. Watch the load bars on the replicas.
+</Step>
+
+<Step>
+Copying a change takes time, called **replication lag**: usually milliseconds, sometimes much longer under load. A replica that is behind can return old data. If you save a change and immediately read it from a lagging replica, you might not see your own change yet.
+</Step>
+
+<Step>
+Now the primary crashes. Replicas still hold the data, so nothing is lost, but nobody can accept writes. The application can keep reading from the replicas, which is already a big improvement over a single server that is simply gone.
+</Step>
+
+<Step>
+**Failover** fixes the write problem: the system picks a healthy replica, usually the one most up to date, and promotes it to be the new primary. Writes resume. Any changes the old primary had not yet sent to anyone can be lost, which is one reason lag matters.
+</Step>
+
+<TryIt>
+Turn the primary off with failover disabled to see writes become unavailable, then enable failover. Try switching a replica off and raising the read traffic: each replica in this model handles 100 reads per second, and the readout shows how much of the traffic is still being served.
+</TryIt>
+
+## Key takeaways
+
+- Writes go to one primary; replicas copy its changes and serve reads.
+- Replicas add read capacity and keep data safe if the primary fails.
+- Replication lag means replicas can briefly serve stale data; failover restores writes but can lose recent changes.
