@@ -23,17 +23,17 @@ export function GraphSceneView({ frame }: { frame: GraphFrame }) {
       {frame.nodes.map((n) => (
           <g key={n.id} data-node={n.id} data-status={n.state.status} className={n.highlighted ? 'node on' : 'node'}>
             {n.state.label && (
-              <text className="sub" x={n.x} y={n.y - TILE / 2 - 4} textAnchor="middle">
+              <text className="sub" x={n.x} y={n.y - TILE / 2 - 3} textAnchor="middle">
                 {n.state.label}
               </text>
             )}
             <rect className="tile" x={n.x - TILE / 2} y={n.y - TILE / 2} width={TILE} height={TILE} rx={8} />
-            <Icon name={n.icon} x={n.x} y={n.y} size={26} />
-            <text className="lbl" x={n.x} y={n.y + TILE / 2 + 12} textAnchor="middle">
+            <Icon name={n.icon} x={n.x} y={n.y - 2} size={26} />
+            <text className="lbl" x={n.x} y={n.y + TILE / 2 + 11} textAnchor="middle">
               {n.label}
             </text>
             {n.state.fill !== undefined && (
-              <rect className="fill" x={n.x - 24} y={n.y + TILE / 2 + 16} width={48 * n.state.fill} height={4} rx={2} />
+              <rect className="fill" x={n.x - 14} y={n.y + TILE / 2 - 5} width={28 * n.state.fill} height={3} rx={1.5} />
             )}
           </g>
         ))}

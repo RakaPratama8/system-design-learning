@@ -5,9 +5,9 @@ const scene: Scene = {
   nodes: [
     { id: 'browser', label: 'Browser', x: 50, y: 100, icon: 'browser' },
     { id: 'resolver', label: 'Resolver', x: 170, y: 100, icon: 'dns' },
-    { id: 'root', label: 'Root', x: 320, y: 44, icon: 'dns' },
+    { id: 'root', label: 'Root', x: 320, y: 42, icon: 'dns' },
     { id: 'tld', label: '.com server', x: 320, y: 100, icon: 'dns' },
-    { id: 'auth', label: 'Auth server', x: 320, y: 156, icon: 'dns' },
+    { id: 'auth', label: 'Auth server', x: 320, y: 158, icon: 'dns' },
   ],
   edges: [
     { from: 'browser', to: 'resolver' },

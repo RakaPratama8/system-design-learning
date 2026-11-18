@@ -6,8 +6,8 @@ const scene: Scene = {
     { id: 'alice', label: 'Alice', x: 45, y: 50, icon: 'person' },
     { id: 'bob', label: 'Bob', x: 45, y: 150, icon: 'person' },
     { id: 'gw', label: 'Chat gateway', x: 170, y: 100, icon: 'gateway' },
-    { id: 'store', label: 'Msg store', x: 310, y: 44, icon: 'database' },
-    { id: 'push', label: 'Push service', x: 310, y: 156, icon: 'push' },
+    { id: 'store', label: 'Msg store', x: 310, y: 42, icon: 'database' },
+    { id: 'push', label: 'Push service', x: 310, y: 158, icon: 'push' },
   ],
   edges: [
     { from: 'alice', to: 'gw' },

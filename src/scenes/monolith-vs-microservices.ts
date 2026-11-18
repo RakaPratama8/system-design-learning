@@ -8,9 +8,9 @@ const scene: Scene = {
     nodes: [
       { id: 'users', label: 'Users', x: 40, y: 100, icon: 'people' },
       { id: 'app', label: 'One app', x: 170, y: 100, icon: 'app' },
-      { id: 'orders', label: 'Orders', x: 320, y: 44, icon: 'order' },
+      { id: 'orders', label: 'Orders', x: 320, y: 42, icon: 'order' },
       { id: 'payments', label: 'Payments', x: 320, y: 100, icon: 'payment' },
-      { id: 'search', label: 'Search', x: 320, y: 156, icon: 'search' },
+      { id: 'search', label: 'Search', x: 320, y: 158, icon: 'search' },
     ],
     edges: [
       { from: 'users', to: 'app' },
@@ -23,9 +23,9 @@ const scene: Scene = {
     nodes: [
       { id: 'users', label: 'Users', x: 40, y: 100, icon: 'people' },
       { id: 'gw', label: 'Gateway', x: 170, y: 100, icon: 'gateway' },
-      { id: 'orders', label: 'Orders', x: 320, y: 44, icon: 'order' },
+      { id: 'orders', label: 'Orders', x: 320, y: 42, icon: 'order' },
       { id: 'payments', label: 'Payments', x: 320, y: 100, icon: 'payment' },
-      { id: 'search', label: 'Search', x: 320, y: 156, icon: 'search' },
+      { id: 'search', label: 'Search', x: 320, y: 158, icon: 'search' },
     ],
     edges: [
       { from: 'users', to: 'gw' },

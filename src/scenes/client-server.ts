@@ -3,9 +3,9 @@ import type { Scene } from '../engine/types';
 const scene: Scene = {
   type: 'graph',
   nodes: [
-    { id: 'phone', label: 'Phone', x: 60, y: 44, icon: 'phone' },
+    { id: 'phone', label: 'Phone', x: 60, y: 42, icon: 'phone' },
     { id: 'laptop', label: 'Laptop', x: 60, y: 100, icon: 'laptop' },
-    { id: 'tablet', label: 'Tablet', x: 60, y: 156, icon: 'tablet' },
+    { id: 'tablet', label: 'Tablet', x: 60, y: 158, icon: 'tablet' },
     { id: 'server', label: 'Server', x: 280, y: 100, icon: 'server' },
   ],
   edges: [

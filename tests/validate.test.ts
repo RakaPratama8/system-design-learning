@@ -86,6 +86,8 @@ describe('validateScene icons', () => {
         { id: 'b', label: 'B', x: 100, y: 60 + dy, icon: 'database' },
       ]);
     expect(validateScene(two(60))).toEqual([]);
+    expect(validateScene(two(58))).toEqual([]);
+    expect(validateScene(two(56)).join()).toMatch(/overlap/);
     expect(validateScene(two(40)).join()).toMatch(/overlap/);
     expect(validateScene(withNodes([
       { id: 'a', label: 'A', x: 100, y: 100, icon: 'server' },

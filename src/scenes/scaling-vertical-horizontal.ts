@@ -15,9 +15,9 @@ const scene: Scene = {
     nodes: [
       { id: 'users', label: 'Users', x: 40, y: 100, icon: 'people' },
       { id: 'lb', label: 'Balancer', x: 150, y: 100, icon: 'balancer' },
-      { id: 's1', label: 'Server 1', x: 310, y: 44, icon: 'server' },
+      { id: 's1', label: 'Server 1', x: 310, y: 42, icon: 'server' },
       { id: 's2', label: 'Server 2', x: 310, y: 100, icon: 'server' },
-      { id: 's3', label: 'Server 3', x: 310, y: 156, icon: 'server' },
+      { id: 's3', label: 'Server 3', x: 310, y: 158, icon: 'server' },
     ],
     edges: [
       { from: 'users', to: 'lb' },

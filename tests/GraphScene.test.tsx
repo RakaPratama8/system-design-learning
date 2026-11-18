@@ -58,5 +58,15 @@ describe('GraphSceneView', () => {
     const { container } = render(<GraphSceneView frame={iconFrame({ state: { status: 'down', label: 'off' } })} />);
     expect(container.querySelector('[data-node="a"]')!.getAttribute('data-status')).toBe('down');
   });
+
+  it('draws the load bar inside the tile so it cannot collide with the node below', () => {
+    const { container } = render(<GraphSceneView frame={iconFrame({ state: { status: 'ok', fill: 1 } })} />);
+    const tile = container.querySelector('rect.tile')!;
+    const bar = container.querySelector('rect.fill')!;
+    const top = Number(tile.getAttribute('y'));
+    const barTop = Number(bar.getAttribute('y'));
+    expect(barTop).toBeGreaterThanOrEqual(top);
+    expect(barTop + Number(bar.getAttribute('height'))).toBeLessThanOrEqual(top + Number(tile.getAttribute('height')));
+  });
 });
 

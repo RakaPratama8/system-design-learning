@@ -4,7 +4,7 @@ const scene: Scene = {
   type: 'graph',
   nodes: [
     { id: 'user', label: 'User', x: 50, y: 100, icon: 'person' },
-    { id: 'edge', label: 'Edge server', x: 190, y: 44, icon: 'cdn-edge' },
+    { id: 'edge', label: 'Edge server', x: 190, y: 42, icon: 'cdn-edge' },
     { id: 'origin', label: 'Origin', x: 330, y: 100, icon: 'server' },
   ],
   edges: [

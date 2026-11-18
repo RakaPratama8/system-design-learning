@@ -7,9 +7,9 @@ const scene: Scene = {
   left: {
     nodes: [
       { id: 'query', label: 'Query', x: 50, y: 100, icon: 'search' },
-      { id: 'orders', label: 'orders', x: 200, y: 44, icon: 'table' },
+      { id: 'orders', label: 'orders', x: 200, y: 42, icon: 'table' },
       { id: 'customers', label: 'customers', x: 200, y: 100, icon: 'table' },
-      { id: 'items', label: 'items', x: 200, y: 156, icon: 'table' },
+      { id: 'items', label: 'items', x: 200, y: 158, icon: 'table' },
     ],
     edges: [
       { from: 'query', to: 'orders' },

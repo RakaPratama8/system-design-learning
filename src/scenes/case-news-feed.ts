@@ -5,10 +5,10 @@ const scene: Scene = {
   nodes: [
     { id: 'poster', label: 'Poster', x: 45, y: 100, icon: 'person' },
     { id: 'svc', label: 'Post service', x: 165, y: 100, icon: 'service' },
-    { id: 'db', label: 'Post store', x: 310, y: 44, icon: 'database' },
+    { id: 'db', label: 'Post store', x: 310, y: 42, icon: 'database' },
     { id: 'f1', label: 'Feed: Ann', x: 310, y: 100, icon: 'feed' },
-    { id: 'f2', label: 'Feed: Bob', x: 310, y: 156, icon: 'feed' },
-    { id: 'reader', label: 'Reader', x: 45, y: 156, icon: 'person' },
+    { id: 'f2', label: 'Feed: Bob', x: 310, y: 158, icon: 'feed' },
+    { id: 'reader', label: 'Reader', x: 45, y: 158, icon: 'person' },
   ],
   edges: [
     { from: 'poster', to: 'svc' },

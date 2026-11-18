@@ -5,9 +5,9 @@ const scene: Scene = {
   nodes: [
     { id: 'client', label: 'Client', x: 45, y: 100, icon: 'laptop' },
     { id: 'app', label: 'App', x: 160, y: 100, icon: 'app' },
-    { id: 'keys', label: 'Key service', x: 310, y: 44, icon: 'key' },
+    { id: 'keys', label: 'Key service', x: 310, y: 42, icon: 'key' },
     { id: 'cache', label: 'Cache', x: 310, y: 100, icon: 'cache' },
-    { id: 'db', label: 'Database', x: 310, y: 156, icon: 'database' },
+    { id: 'db', label: 'Database', x: 310, y: 158, icon: 'database' },
   ],
   edges: [
     { from: 'client', to: 'app' },

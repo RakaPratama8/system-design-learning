@@ -5,9 +5,9 @@ const scene: Scene = {
   nodes: [
     { id: 'pub', label: 'Publisher', x: 55, y: 100, icon: 'service' },
     { id: 'topic', label: 'Topic', x: 190, y: 100, icon: 'topic' },
-    { id: 'email', label: 'Email', x: 330, y: 44, icon: 'email' },
+    { id: 'email', label: 'Email', x: 330, y: 42, icon: 'email' },
     { id: 'analytics', label: 'Analytics', x: 330, y: 100, icon: 'analytics' },
-    { id: 'search', label: 'Search', x: 330, y: 156, icon: 'search' },
+    { id: 'search', label: 'Search', x: 330, y: 158, icon: 'search' },
   ],
   edges: [
     { from: 'pub', to: 'topic' },

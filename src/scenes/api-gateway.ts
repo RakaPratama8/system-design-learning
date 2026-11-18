@@ -5,9 +5,9 @@ const scene: Scene = {
   nodes: [
     { id: 'client', label: 'Clients', x: 50, y: 100, icon: 'people' },
     { id: 'gw', label: 'Gateway', x: 180, y: 100, icon: 'gateway' },
-    { id: 'users', label: 'Users svc', x: 330, y: 44, icon: 'service' },
+    { id: 'users', label: 'Users svc', x: 330, y: 42, icon: 'service' },
     { id: 'orders', label: 'Orders svc', x: 330, y: 100, icon: 'order' },
-    { id: 'pay', label: 'Payments', x: 330, y: 156, icon: 'payment' },
+    { id: 'pay', label: 'Payments', x: 330, y: 158, icon: 'payment' },
   ],
   edges: [
     { from: 'client', to: 'gw' },
