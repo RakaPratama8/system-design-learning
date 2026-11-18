@@ -1,7 +1,9 @@
+import type { IconName } from './icons';
+
 export type NodeStatus = 'ok' | 'hot' | 'down';
 export interface NodeState { status: NodeStatus; fill?: number; label?: string } // fill 0..1
 export interface Point { x: number; y: number }
-export interface GraphNode { id: string; label: string; x: number; y: number } // viewBox 0 0 400 200
+export interface GraphNode { id: string; label: string; x: number; y: number; icon?: IconName } // viewBox 0 0 400 200
 export interface GraphEdge { from: string; to: string } // edge id = `${from}>${to}`
 export interface GraphStep {
   caption: string;
@@ -10,7 +12,7 @@ export interface GraphStep {
   states?: Record<string, NodeState>;
 }
 export interface GraphScene { type: 'graph'; nodes: GraphNode[]; edges: GraphEdge[]; steps: GraphStep[] }
-export interface Lane { id: string; label: string }
+export interface Lane { id: string; label: string; icon?: IconName }
 export interface SequenceStep {
   caption: string;
   message?: { from: string; to: string; label: string };

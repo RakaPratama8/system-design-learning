@@ -46,6 +46,40 @@ describe('validateScene graph', () => {
   });
 });
 
+describe('validateScene icons', () => {
+  const withNodes = (nodes: GraphScene['nodes']): GraphScene => ({ ...graph(), nodes, edges: [], steps: [{ caption: 'x' }] });
+  it('rejects an unknown icon on a node and on a lane', () => {
+    const s = withNodes([{ id: 'a', label: 'A', x: 100, y: 100, icon: 'toaster' as never }]);
+    expect(validateScene(s).join()).toMatch(/toaster/);
+    const seq: SequenceScene = {
+      type: 'sequence',
+      lanes: [{ id: 'c', label: 'C', icon: 'toaster' as never }],
+      steps: [{ caption: 'x' }],
+    };
+    expect(validateScene(seq).join()).toMatch(/toaster/);
+  });
+  it('applies the taller icon bounds', () => {
+    expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 20, icon: 'server' }])).join()).toMatch(/bounds/);
+    expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 170, icon: 'server' }])).join()).toMatch(/bounds/);
+    expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 170 }]))).toEqual([]);
+    expect(validateScene(withNodes([{ id: 'a', label: 'A', x: 100, y: 100, icon: 'server' }]))).toEqual([]);
+  });
+  it('applies the taller icon overlap rule', () => {
+    const two = (dy: number, iconB = true) =>
+      withNodes([
+        { id: 'a', label: 'A', x: 100, y: 60, icon: 'server' },
+        { id: 'b', label: 'B', x: 100, y: 60 + dy, ...(iconB ? { icon: 'database' as const } : {}) },
+      ]);
+    expect(validateScene(two(60))).toEqual([]);
+    expect(validateScene(two(40)).join()).toMatch(/overlap/);
+    expect(validateScene(two(40, false)).join()).toMatch(/overlap/);
+    expect(validateScene(withNodes([
+      { id: 'a', label: 'A', x: 100, y: 100, icon: 'server' },
+      { id: 'b', label: 'B', x: 150, y: 100, icon: 'server' },
+    ])).join()).toMatch(/overlap/);
+  });
+});
+
 describe('validateScene graph layout', () => {
   it('rejects a node outside the drawable area', () => {
     const s = graph();
