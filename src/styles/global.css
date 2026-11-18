@@ -83,3 +83,7 @@ a { color: var(--accent); }
 .compare .side { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .compare h3 { margin: 0; font-size: 0.8rem; text-align: center; color: var(--muted); }
 .compare .scene { flex: 1; min-height: 0; }
+
+.nums text { font-size: 11px; fill: var(--text); font-family: var(--font); }
+.nums .track { fill: var(--line); }
+.nums .val { fill: var(--accent); }
