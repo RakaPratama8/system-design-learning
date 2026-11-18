@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Step from '../../components/Step.astro';
+import { Player } from '../../components/Player';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title}>
+  <p><a href="/">← All lessons</a></p>
+  <h1>{entry.data.title}</h1>
+  <p class="summary">{entry.data.summary}</p>
+  <div class="pin"><Player slug={entry.id} client:load /></div>
+  <article class="lesson"><Content components={{ Step }} /></article>
+</Base>

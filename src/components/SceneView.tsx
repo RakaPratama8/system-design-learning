@@ -1,0 +1,21 @@
+import { buildGraphFrame } from '../engine/frames/graph';
+import type { Scene } from '../engine/types';
+import { GraphSceneView } from './scenes/GraphScene';
+
+interface Props { scene: Scene; step: number; progress: number; reduced: boolean }
+
+export function SceneView({ scene, step, progress, reduced }: Props) {
+  switch (scene.type) {
+    case 'graph': {
+      const frame = buildGraphFrame(scene, step, progress, reduced);
+      return (
+        <>
+          <GraphSceneView frame={frame} />
+          <p data-caption className="caption">{frame.caption}</p>
+        </>
+      );
+    }
+    default:
+      throw new Error(`unsupported scene type: ${(scene as { type: string }).type}`);
+  }
+}

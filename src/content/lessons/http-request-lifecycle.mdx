@@ -1,0 +1,38 @@
+---
+title: The life of an HTTP request
+level: 1
+order: 3
+summary: What happens between pressing Enter and seeing a page.
+---
+
+Every page you open starts the same way: a browser sends a request and waits for a response. Following one request from start to finish gives you the vocabulary for almost everything else in system design.
+
+<Step>
+You type a URL such as `example.com/shop` and press Enter. At this point the browser only has a **name**. It has no idea which computer in the world should answer, and computers on the internet talk to each other using numeric addresses, not names.
+</Step>
+
+<Step>
+The browser asks **DNS** (the Domain Name System), which works like a phone book for the internet. DNS answers with an IP address, for example `93.184.216.34`. The browser remembers the answer for a while, so the next visit to the same name skips this trip.
+</Step>
+
+<Step>
+With an address in hand, the browser opens a connection to that server and sends an **HTTP request**: a short message saying what it wants, such as "GET the page at `/shop`". For `https` addresses, the two sides also agree on encryption first so nobody in between can read the message.
+</Step>
+
+<Step>
+The server runs your application code. The shop page needs a list of products, and the server does not keep them in memory, so it asks the **database**. Notice the database fill rising: every request that needs data puts some work on it, which is why databases tend to become the first bottleneck as traffic grows.
+</Step>
+
+<Step>
+The database finds the matching rows and sends them back to the server. How long this takes depends on how the data is stored and indexed, and it often makes up most of the time the whole request takes.
+</Step>
+
+<Step>
+The server turns the data into a page (HTML) and sends back an **HTTP response** with a status code, such as `200` for success. The browser draws the page. The whole round trip usually takes well under a second, but each hop on the way is a place where a real system can be slow or fail.
+</Step>
+
+## Key takeaways
+
+- A request is a chain of hops: DNS, then the server, then often a database, then back.
+- Each hop adds latency and is a possible point of failure.
+- Caching the DNS answer, the page, or the data lets you skip hops, which later lessons build on.
