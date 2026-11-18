@@ -3,10 +3,10 @@ import type { Scene } from '../engine/types';
 const scene: Scene = {
   type: 'graph',
   nodes: [
-    { id: 'client', label: 'Users', x: 50, y: 100 },
-    { id: 'app', label: 'App', x: 150, y: 100 },
-    { id: 'cache', label: 'Cache', x: 270, y: 50 },
-    { id: 'db', label: 'Database', x: 270, y: 150 },
+    { id: 'client', label: 'Users', x: 50, y: 100, icon: 'people' },
+    { id: 'app', label: 'App', x: 150, y: 100, icon: 'app' },
+    { id: 'cache', label: 'Cache', x: 270, y: 50, icon: 'cache' },
+    { id: 'db', label: 'Database', x: 270, y: 150, icon: 'database' },
   ],
   edges: [
     { from: 'client', to: 'app' },

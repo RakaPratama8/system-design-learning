@@ -95,6 +95,8 @@ describe('lessons', () => {
 const ICONIZED = [
   'client-server', 'dns', 'http-request-lifecycle', 'apis-rest', 'sql-vs-nosql',
   'scaling-vertical-horizontal', 'load-balancers',
+  'caching', 'cdn', 'replication', 'message-queues', 'pub-sub', 'rate-limiting', 'api-gateway',
+  'monolith-vs-microservices', 'auth-sessions-tokens',
 ];
 
 describe('icons', () => {
