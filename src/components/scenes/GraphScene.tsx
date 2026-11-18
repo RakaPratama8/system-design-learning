@@ -1,4 +1,6 @@
 import type { GraphFrame } from '../../engine/frames/graph';
+import { TILE } from '../../engine/layout';
+import { Icon } from '../icons/Icon';
 
 const W = 72;
 const H = 32;
@@ -21,7 +23,24 @@ export function GraphSceneView({ frame }: { frame: GraphFrame }) {
           y2={at(e.to).y}
         />
       ))}
-      {frame.nodes.map((n) => (
+      {frame.nodes.map((n) =>
+        n.icon ? (
+          <g key={n.id} data-node={n.id} data-status={n.state.status} className={n.highlighted ? 'node on' : 'node'}>
+            {n.state.label && (
+              <text className="sub" x={n.x} y={n.y - TILE / 2 - 4} textAnchor="middle">
+                {n.state.label}
+              </text>
+            )}
+            <rect className="tile" x={n.x - TILE / 2} y={n.y - TILE / 2} width={TILE} height={TILE} rx={8} />
+            <Icon name={n.icon} x={n.x} y={n.y} size={26} />
+            <text className="lbl" x={n.x} y={n.y + TILE / 2 + 12} textAnchor="middle">
+              {n.label}
+            </text>
+            {n.state.fill !== undefined && (
+              <rect className="fill" x={n.x - 24} y={n.y + TILE / 2 + 16} width={48 * n.state.fill} height={4} rx={2} />
+            )}
+          </g>
+        ) : (
         <g key={n.id} data-node={n.id} data-status={n.state.status} className={n.highlighted ? 'node on' : 'node'}>
           <rect x={n.x - W / 2} y={n.y - H / 2} width={W} height={H} rx={6} />
           {n.state.fill !== undefined && (
@@ -43,7 +62,8 @@ export function GraphSceneView({ frame }: { frame: GraphFrame }) {
             </text>
           )}
         </g>
-      ))}
+        ),
+      )}
       {frame.marker && <circle data-marker="" className="marker" cx={frame.marker.x} cy={frame.marker.y} r={5} />}
     </svg>
   );
