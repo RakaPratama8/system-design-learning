@@ -1,0 +1,38 @@
+---
+title: Distributed transactions and sagas
+level: 3
+order: 24
+summary: How to complete a multi-step business action across services that each own their own database.
+---
+
+In a single database, a **transaction** makes several changes succeed or fail together. When an action spans several services, each with its own database, no single transaction can cover them. A **saga** is a common way to keep such an action correct anyway.
+
+<Step>
+Placing an order needs several steps in different services: charge the card, reserve the stock, schedule the shipping. A saga runs them **one after another as a sequence of local transactions**, each in one service. The first step: the Order service asks Payment to charge the card.
+</Step>
+
+<Step>
+The Payment service charges the card and commits this change to **its own database**, then reports success. That change is real and visible now, before the other steps have even started. This is the main difference from a classic transaction, which hides intermediate states.
+</Step>
+
+<Step>
+The saga moves on to step two: Order asks Inventory to reserve the items. Each step is its own small transaction, which only needs to be consistent inside one service.
+</Step>
+
+<Step>
+Step two fails because the item is out of stock. In a single database you would simply roll back. But the payment is already committed in a different service, so nothing can undo it automatically.
+</Step>
+
+<Step>
+The answer is a **compensating action** for every step: an operation that undoes its business effect. For "charge card" it is "refund the card". The saga runs the compensations of the steps that have already succeeded, in reverse order. A compensation is a new action, not a deletion, so the history is still visible (a charge and then a refund).
+</Step>
+
+<Step>
+The order ends up cancelled and the customer has been refunded. Between the charge and the refund, though, the system was briefly inconsistent: the customer was charged for an order that would not happen. Sagas give up isolation and are **eventually consistent**. They can be coordinated by a central **orchestrator** that tells each service what to do, or by services reacting to each other's events (**choreography**).
+</Step>
+
+## Key takeaways
+
+- A saga is a sequence of local transactions; if one fails, compensating actions undo the earlier ones.
+- Intermediate states are visible to others, so design for them, for example with statuses like "pending" and "cancelled".
+- Every step and every compensation should be idempotent, because they will be retried.

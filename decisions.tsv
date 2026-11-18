@@ -15,3 +15,8 @@ time	decision	reason	evidence	result
 2026-11-18T09:37	pub-sub: Kafka named as an example of an event streaming platform	Well-known example; no deep dive	lesson text	accepted
 2026-11-18T09:39	Skip: replication scene still draws primary->r2 after failover	Cosmetic; step caption explains failover	Level 2 accuracy review	deferred
 2026-11-18T09:39	rate-limiting sim: effective burst = max(burst, rate) because one tick is one second	A smaller bucket would cap steady traffic below the refill rate in a per-second model	sim test	done
+2026-11-18T09:42	consensus-raft: intuition level only (terms, votes, log commit); omits log matching, term rules for stale leaders, membership changes	Keep it beginner-friendly per the spec	lesson text	accepted
+2026-11-18T09:42	cap-consistency: presents CAP as a choice during a partition, mentions tuning and weaker models only briefly	Avoid the common "pick 2 of 3" misreading	lesson text	needs owner review
+2026-11-18T09:42	case studies: numbers (100M links/month, 100 reads per write, 62^7 keys) are illustrative	Order-of-magnitude demonstrations	lesson text	accepted
+2026-11-18T09:42	observability: frames the three pillars as metrics=that, traces=where, logs=why	Common teaching heuristic, not strict	lesson text	accepted
+2026-11-18T09:42	sagas: describes orchestration vs choreography in one sentence	Deeper coverage out of scope	lesson text	accepted

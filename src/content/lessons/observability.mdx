@@ -1,0 +1,42 @@
+---
+title: "Observability: logs, metrics, traces"
+level: 3
+order: 26
+summary: How you find out what a running system is doing, and why it is slow or broken.
+---
+
+You cannot attach a debugger to a system of dozens of services handling thousands of requests. **Observability** means collecting enough information from a running system that you can answer questions about it, including ones you did not think of in advance. It rests on three kinds of data: logs, metrics, and traces.
+
+<Step>
+Take one request. It enters through the gateway, which assigns it a **trace id**, a unique label that is passed along to every service the request touches. The Orders service receives the request together with that id.
+</Step>
+
+<Step>
+Orders needs data, so it queries the database. Each of these calls takes time, and in a real system there may be dozens of them for a single user action.
+</Step>
+
+<Step>
+The database replies, but it takes 800 ms. Nothing failed, so no error was reported. The request is simply slow, which is the hardest kind of problem to notice without measurement.
+</Step>
+
+<Step>
+The response travels back and the user waits about a second in total. The user might not complain, but across thousands of requests this adds up, and you want to find out without waiting for complaints.
+</Step>
+
+<Step>
+**Metrics** are numbers measured over time, such as requests per second, error rate, and latency percentiles. They are cheap to store and good for dashboards and **alerts**. A jump in p99 latency (the time within which 99% of requests finish) tells you that *something* is wrong, but not what.
+</Step>
+
+<Step>
+**Logs** are timestamped records of individual events, such as "slow query: 800 ms". They hold the detail. Because every log line carries the trace id, you can search for one request and see what each service wrote about it. Structured logs (fields, not free text) make this far easier.
+</Step>
+
+<Step>
+**Traces** follow a single request across services as a tree of timed steps called spans. Looking at the trace for this request shows at once that 800 of the 1000 ms were spent in the database, so you know where to look. Metrics tell you that something is wrong, traces tell you where, and logs tell you why.
+</Step>
+
+## Key takeaways
+
+- Metrics show that something is wrong, traces show where, and logs show why.
+- Carry a trace id through every service so one request can be followed end to end.
+- Watch tail latency (p95, p99), not just averages, and alert on symptoms users feel.

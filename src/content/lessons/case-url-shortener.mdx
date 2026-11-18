@@ -1,0 +1,38 @@
+---
+title: "Case study: URL shortener"
+level: 3
+order: 27
+summary: Designing a service like bit.ly, using the building blocks from earlier lessons.
+---
+
+A URL shortener turns `https://example.com/some/very/long/page?id=123` into something like `https://short.example/aZ3k9Qx` and redirects visitors to the original. It is a classic design exercise because it is simple to state and touches many topics.
+
+<Step>
+**Requirements first.** Users create short links, and anyone can open them and be redirected. Opening should be very fast, and links must not break. Estimate the scale: if 100 million new links are created a month, that is only about 40 writes per second, but each link may be opened many times, so reads dominate, perhaps 100 reads for each write.
+</Step>
+
+<Step>
+**Creating a key.** Each link needs a unique short key. A 7-character key using letters and digits (base 62) has 62⁷, about 3.5 trillion, combinations, which is plenty. Options: take a hash of the URL and handle collisions, or use a counter and encode its value in base 62. A separate **key service** that hands out unused keys, in ranges to each app server, avoids collisions without every request touching a shared counter.
+</Step>
+
+<Step>
+**Storing it.** The app saves a record `short key → long URL` (plus creation time, owner, and optional expiry) in a database. The data is small and accessed by key, so a key-value or wide-column store, or a sharded relational database, all work. The key is a natural shard key and spreads evenly if keys are random.
+</Step>
+
+<Step>
+**Reading.** A visitor opens a short link. The request reaches an app server, which looks up the key. Since the same popular links are requested again and again, the app checks a **cache** first, as in the caching lesson.
+</Step>
+
+<Step>
+On a **miss** the app reads the database, stores the result in the cache, and returns an HTTP **redirect**. A `301` (permanent) redirect lets browsers remember it, which reduces load but means you never see repeat visits, while `302` (temporary) sends every visit through your service, which lets you count clicks. Choose according to whether you need analytics.
+</Step>
+
+<Step>
+**Scaling and failure.** Put the app servers behind a load balancer, replicate the database for reads and safety, shard it as it grows, and cache the hottest links. Add rate limiting to stop abuse, and consider what happens when a key service range runs out. Most of the design is composing pieces you already know.
+</Step>
+
+## Key takeaways
+
+- Start from requirements and rough numbers: reads dominate writes, so cache aggressively.
+- Generate unique keys without a single shared counter, for example by giving each server a range.
+- The redirect type (301 or 302) is a trade-off between speed and analytics.

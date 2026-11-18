@@ -1,0 +1,38 @@
+---
+title: "Case study: news feed"
+level: 3
+order: 28
+summary: Designing the timeline of a social app, and the one decision that shapes it.
+---
+
+A news feed shows the latest posts from the people you follow, newest first. It must load instantly, even though it combines posts from hundreds of accounts. The key design choice is *when* to do the work of assembling the feed.
+
+<Step>
+There are two basic designs. **Fan-out on write** builds each user's feed in advance, at the moment someone posts. **Fan-out on read** builds the feed only when a user opens the app, by gathering recent posts from everyone they follow. Think about reads versus writes: in most social apps, feeds are opened far more often than posts are made.
+</Step>
+
+<Step>
+Start with **fan-out on write**. When a user publishes a post, the post service first saves it in the **post store**, the single source of truth for post content.
+</Step>
+
+<Step>
+Then it looks up the author's followers and **pushes the post id** into each follower's prepared feed, which is a list kept in a fast store such as an in-memory cache. Only ids are copied, not the full post, so the cost per follower is small.
+</Step>
+
+<Step>
+Now reading a feed is simple and fast: fetch the prepared list of post ids for that user and load the posts, often straight from a cache. The expensive work was done earlier, when nobody was waiting. This suits the common case, where reads greatly outnumber writes.
+</Step>
+
+<Step>
+The weakness is the **celebrity problem**. An account with ten million followers makes a single post cause ten million feed writes, which takes a long time and can overload the system, and most of those followers might not even open the app that day. Fan-out on write does a lot of wasted work for the most followed accounts.
+</Step>
+
+<Step>
+Real systems usually use a **hybrid**. Posts from ordinary users are fanned out on write. Posts from very popular accounts are *not* copied to millions of feeds. Instead, when you open your feed, the service takes your prepared feed and **merges in** the recent posts of the popular accounts you follow. Feeds are then fast for most users and writes stay bounded.
+</Step>
+
+## Key takeaways
+
+- Fan-out on write makes reads fast at the cost of more work when posting; fan-out on read does the reverse.
+- Because feeds are read much more than written, precomputing them usually wins, except for accounts with huge audiences.
+- A hybrid (push for most, pull for celebrities) balances both, and a cache of post ids keeps reads fast.

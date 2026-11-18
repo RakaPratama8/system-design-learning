@@ -1,0 +1,42 @@
+---
+title: Idempotency, retries, and backoff
+level: 3
+order: 25
+summary: How to retry failed requests safely without doing the same thing twice.
+---
+
+Networks lose messages and servers fail halfway. The standard answer is to **retry**. Retrying makes a system more reliable, but only if repeating a request is safe.
+
+<Step>
+A client asks a server to charge $10 to a card. It sends the request and waits for the reply.
+</Step>
+
+<Step>
+The server charges the card, but the **reply is lost** on the way back, or the connection drops. The client does not receive an answer and gives up waiting with a timeout. From the client's side, it is impossible to tell whether the request never arrived, failed, or succeeded without the reply getting back.
+</Step>
+
+<Step>
+Since the client cannot know, the safest-looking choice is to try again. If the server simply runs the request again, the card is charged **twice**. Retries are necessary, but a naive retry turns a network failure into a duplicate action. The same issue appears with queue messages delivered more than once.
+</Step>
+
+<Step>
+An operation is **idempotent** if doing it several times has the same effect as doing it once. Reading data and "set the price to 10" are naturally idempotent. "Add $10 to the balance" is not. To make such operations safe, the client sends an **idempotency key**: a unique id, such as a random UUID, that it chooses once per logical action. The server performs the work and stores the result under that key.
+</Step>
+
+<Step>
+The response is lost again, and the client retries, sending **the same key** as before. The point is that the key stays the same across attempts of one action and changes for a new action.
+</Step>
+
+<Step>
+The server looks up the key, sees that it has already handled it, and returns the **stored result** without charging again. The client gets its answer, and the card has been charged exactly once. In effect, "at least once" delivery plus idempotent handling gives you "exactly once" behaviour.
+</Step>
+
+<Step>
+When to retry matters too. If many clients retry immediately after a failure, they create a stampede that keeps the server down. Use **exponential backoff**: wait 1 second, then 2, then 4, and so on up to a limit, and add random **jitter** so clients do not retry in lockstep. Limit the number of attempts, and only retry errors that can be transient, such as timeouts or 503, not ones like 400.
+</Step>
+
+## Key takeaways
+
+- A timeout does not tell you whether the work was done, so retries must be safe.
+- Make operations idempotent, for example with an idempotency key stored by the server.
+- Retry with exponential backoff and jitter, a maximum number of attempts, and only for transient errors.

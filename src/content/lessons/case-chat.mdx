@@ -1,0 +1,38 @@
+---
+title: "Case study: chat system"
+level: 3
+order: 29
+summary: Designing messaging that feels instant and never loses a message.
+---
+
+A chat system such as WhatsApp or Slack has demanding requirements: messages arrive in well under a second, in the right order, and are never lost, even when people go offline.
+
+<Step>
+The usual HTTP pattern, where the client asks and the server answers, is a poor fit, because the server has to be able to **push** a message at any moment. So each client opens a **persistent connection**, typically a **WebSocket**, to a chat gateway and keeps it open. The gateway knows who is online and holds a connection per user.
+</Step>
+
+<Step>
+Alice types a message and her app sends it over her open connection to the gateway. The message includes a conversation id and a client-generated message id, which will later allow the system to detect duplicates when a send is retried.
+</Step>
+
+<Step>
+Before anything else, the gateway **stores the message durably** in a message store, a database built for lots of writes and for reading the latest messages of a conversation, usually partitioned by conversation id. Saving first means that a crash after this point cannot lose the message. Each message also receives an increasing sequence number within its conversation, which fixes the order.
+</Step>
+
+<Step>
+If Bob is online, the gateway finds the connection that Bob is on and **pushes** the message to him immediately. With many gateway servers, a lookup (for example a shared table of which gateway each user is connected to) tells the system which one to send it through. Bob's app then replies with an acknowledgement, which lets the sender see "delivered".
+</Step>
+
+<Step>
+If Bob is **offline**, no connection exists. The message simply stays in the store, and a **push notification** service sends an alert to his phone through the platform's notification system. Nothing is lost: delivery is just postponed.
+</Step>
+
+<Step>
+When Bob opens the app, it reconnects and **syncs**: it tells the server the sequence number of the last message it has, and the server sends everything newer. Because the store is the source of truth and the order is fixed by sequence numbers, Bob sees every message exactly once and in order. Group chats work the same way, except that the gateway delivers each message to every member's connection.
+</Step>
+
+## Key takeaways
+
+- Use persistent connections (WebSockets) so the server can push messages instantly.
+- Store the message before delivering it; offline users receive it later through sync plus a push notification.
+- Per-conversation sequence numbers give a reliable order and make "everything after message N" a simple query.
