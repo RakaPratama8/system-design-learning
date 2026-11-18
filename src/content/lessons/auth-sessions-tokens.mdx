@@ -1,0 +1,46 @@
+---
+title: "Authentication: sessions vs tokens"
+level: 2
+order: 18
+summary: Two ways for a server to remember who you are between requests.
+---
+
+HTTP requests are independent: the server does not automatically remember the last one. After a user logs in, every later request must prove who it comes from. There are two common approaches.
+
+<Step>
+**Sessions.** The client sends a username and password to log in. The server checks them and, if they are correct, creates a **session**: a record saying "this session belongs to user 7".
+</Step>
+
+<Step>
+The server stores the record, in memory, in a database, or in a fast store such as Redis, and sends the client a long random **session id**. The browser keeps it in a **cookie**. The id carries no meaning itself, it is only a key to find the record.
+</Step>
+
+<Step>
+On every later request the browser sends the cookie back automatically, so the server can tell the request belongs to that session.
+</Step>
+
+<Step>
+The server **looks up** the id in the session store to find the user. This makes sessions easy to control: to log someone out or block a stolen session, delete the record. The cost is that the server has state, and when you run several servers they must all reach the same session store.
+</Step>
+
+<Step>
+**Tokens.** Log in again, but now the server does not store anything. Instead it builds a **token** containing the user's identity and an expiry time, and signs it with a secret key. A common format is the JSON Web Token (JWT).
+</Step>
+
+<Step>
+The server returns the token to the client. Anyone can read what is inside, but nobody can change it without breaking the signature, so it cannot be forged. Sensitive data should therefore not be put in it.
+</Step>
+
+<Step>
+With each request, the client sends the token, and any server that knows the signing key can **verify** it on its own, with no lookup. This scales easily across many servers and services, which is why tokens are popular with APIs and microservices.
+</Step>
+
+<Step>
+The trade-off: because the server keeps no record, a token is valid until it expires, so **revoking** one early is hard. Short expiry times and refresh tokens reduce the risk. Sessions give you control and easy revocation; tokens give you statelessness. Many systems use sessions for web apps and tokens for APIs.
+</Step>
+
+## Key takeaways
+
+- A session stores state on the server and gives the client an opaque id; a token carries signed state in the token itself.
+- Sessions are easy to revoke but need shared storage; tokens verify without lookup but are hard to revoke before expiry.
+- Whichever you use, send it only over HTTPS and keep expiry times short.

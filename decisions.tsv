@@ -9,3 +9,7 @@ time	decision	reason	evidence	result
 2026-11-18T09:32	sql-vs-nosql: picked the document store as the NoSQL example	Most common NoSQL family for app developers; key-value/column/graph not covered	lesson text says NoSQL is an umbrella	needs owner review
 2026-11-18T09:32	scaling: load percentages in the compare scene are illustrative	Show the ceiling and failure contrast	scene	accepted
 2026-11-18T09:32	dns: lesson stops at one resolver path (root, TLD, authoritative) and omits DNSSEC and recursive vs iterative terminology	Keep it beginner level	lesson text	accepted
+2026-11-18T09:37	estimation: 10M daily users, 10 requests each, peak = 3x average, 10% writes of 1 KB are assumptions	Round illustrative numbers	lesson text states assumptions	accepted
+2026-11-18T09:37	auth-sessions-tokens: JWT mentioned as the common token format; refresh tokens and OAuth are not covered	Keep within intuition level	lesson text	accepted
+2026-11-18T09:37	monolith-vs-microservices: states a balanced view rather than recommending microservices	Avoid a one-sided claim	lesson text	needs owner review
+2026-11-18T09:37	pub-sub: Kafka named as an example of an event streaming platform	Well-known example; no deep dive	lesson text	accepted

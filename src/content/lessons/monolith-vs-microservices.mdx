@@ -1,0 +1,34 @@
+---
+title: Monolith vs microservices
+level: 2
+order: 17
+summary: "One program or many small ones: what each choice gives and costs."
+---
+
+There are two broad ways to organize an application's code and deployment, and teams regularly argue about which is better. The honest answer is that each has costs.
+
+<Step>
+A **monolith** is a single program, built and deployed as one unit, that contains all features: orders, payments, search, and so on. **Microservices** divide the application into many small services, each with one responsibility, each deployed on its own and communicating over the network.
+</Step>
+
+<Step>
+In a monolith, modules call each other as ordinary **function calls** inside one process. They are fast, can share a database transaction, and are easy to debug in one place. Many successful products, especially early on, run as a well-organized monolith.
+</Step>
+
+<Step>
+In microservices every call between services is a **network call**. It is slower by orders of magnitude than a function call, and it can time out, fail, or return an error. You must deal with retries, versioned interfaces, and finding out which service is slow. This is the complexity you pay for.
+</Step>
+
+<Step>
+What you gain is **isolation**. If Payments becomes slow or crashes in a monolith, it can exhaust the shared memory or threads and drag everything down. With separate services the problem can stay inside Payments, and each service can be scaled according to its own load.
+</Step>
+
+<Step>
+Microservices also let teams **deploy independently**. One team can release a Search change without coordinating with everyone. A monolith must redeploy everything, which is simpler in tooling but slower and riskier as the team grows. Microservices need good automation, monitoring, and an API gateway in front.
+</Step>
+
+## Key takeaways
+
+- A monolith is simpler to build, run, and debug; microservices add network complexity in exchange for isolation and independent deployment.
+- Microservices tend to pay off when many teams work on a large system. For a small team, they often add cost without much benefit.
+- A well-structured monolith can be split into services later, along boundaries that have proven themselves.

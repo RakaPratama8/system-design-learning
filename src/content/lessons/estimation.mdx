@@ -1,0 +1,38 @@
+---
+title: Back-of-envelope estimation
+level: 2
+order: 19
+summary: Rough arithmetic that tells you how big a system needs to be.
+---
+
+Before choosing a design, you need to know the scale. Will it see ten requests per second or ten thousand? Does the data fit on one disk? **Back-of-envelope estimation** answers such questions with quick, rough arithmetic.
+
+<Step>
+Begin with an assumption you can state out loud: this product has **10 million daily active users**. It does not have to be exact. If the real number is 5 or 20 million, your conclusions will mostly hold, and it is better to start from a clear number than to avoid the question.
+</Step>
+
+<Step>
+Next estimate what each user does. If the average user makes **10 requests a day**, that is 10 million × 10 = **100 million requests per day**. Write down every assumption so that you can change it later and see what happens.
+</Step>
+
+<Step>
+Convert to **requests per second**, since that is what servers handle. A day has about 86,400 seconds, which you can round to 100,000 for mental math. 100 million ÷ 86,400 is about **1,157 requests per second** on average.
+</Step>
+
+<Step>
+Real traffic is bursty: it is high in the evening and low at night. A common rule of thumb is that **peak load is 2 to 3 times the average**. Here that is roughly 3,500 requests per second, and this is the number you should design for, not the average.
+</Step>
+
+<Step>
+Now storage. Suppose 1 in 10 requests writes about 1 KB of data. That is 10 million writes × 1 KB = **10 GB per day**, or about 3.6 TB per year. Add replication copies (often 3×) to see the real storage needed.
+</Step>
+
+<Step>
+What did we learn? About 3,500 requests per second is within reach of a small group of servers with a cache and a database, not a huge fleet, and a few terabytes per year is easily handled by modern disks. Estimation does not give you the design, but it tells you which designs are worth considering and which are overkill.
+</Step>
+
+## Key takeaways
+
+- State assumptions, use round numbers, and aim for the right order of magnitude.
+- Convert daily totals to per-second rates, and design for peak load, roughly 2 to 3 times the average.
+- Remember replication when estimating storage, and check each answer for plausibility.

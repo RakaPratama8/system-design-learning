@@ -1,0 +1,38 @@
+---
+title: API gateway and reverse proxy
+level: 2
+order: 16
+summary: One front door that handles the common work before requests reach your services.
+---
+
+As a system grows into many services, clients should not need to know how it is split up. An **API gateway** is a single entry point that sits in front of the services. It is a kind of **reverse proxy**: a server that receives requests on behalf of other servers and forwards them on.
+
+<Step>
+Clients send every request to the gateway's address. They do not know how many services exist or where they run. This also lets you move, split, or replace services behind the gateway without changing any client.
+</Step>
+
+<Step>
+The gateway handles **authentication**: it checks the user's token or API key once, at the edge, so that each service does not need to repeat the same logic. Requests that fail this check are rejected immediately and never reach a service.
+</Step>
+
+<Step>
+It also applies **policies** shared by all services, such as rate limiting (covered earlier), request size limits, logging, and encryption (TLS termination). Putting these in one place keeps them consistent and keeps services simple.
+</Step>
+
+<Step>
+Then it **routes** each request to the right service, usually by looking at the path or host name: `/orders/...` goes to the Orders service, `/users/...` to the Users service. This is the core job of any reverse proxy.
+</Step>
+
+<Step>
+Some gateways also **aggregate** responses: one call from a mobile app can fan out to three services, and the gateway returns a single combined answer. This saves slow round trips over mobile networks. Gateways can also cache common responses.
+</Step>
+
+<Step>
+The gateway is not free. Every request takes an extra hop, and as the single front door it is now critical: if it fails, everything behind it is unreachable. So it is run as several copies behind a load balancer, and its logic is kept small, so it does not turn into a bottleneck or a second monolith.
+</Step>
+
+## Key takeaways
+
+- A gateway gives clients one address and handles shared concerns: authentication, policies, and routing.
+- A reverse proxy forwards requests to servers on their behalf; a gateway adds API-specific features on top.
+- It must be highly available and lightweight, because everything passes through it.
