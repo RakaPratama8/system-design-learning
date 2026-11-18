@@ -1,15 +1,7 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { scrollToTryIt } from './helpers';
 
 const URL = '/lessons/load-balancers';
-
-async function scrollToTryIt(page: Page) {
-  await page.evaluate(() => {
-    const pin = document.querySelector('.pin') as HTMLElement;
-    const anchor = pin.offsetHeight + (innerHeight - pin.offsetHeight) / 2;
-    const top = document.querySelector('[data-tryit]')!.getBoundingClientRect().top;
-    window.scrollTo(0, window.scrollY + top - anchor + 20);
-  });
-}
 
 test('try it: controls drive the diagram and requests stream', async ({ page }) => {
   await page.goto(URL);
@@ -44,4 +36,15 @@ test('scrolling back up returns to the watch view', async ({ page }) => {
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page.locator('[data-live]')).toHaveCount(0);
   await expect(page.locator('[data-caption]')).toBeVisible();
+});
+
+test('ArrowDown inside Try it keeps the live view and the scroll position', async ({ page }) => {
+  await page.goto(URL);
+  await scrollToTryIt(page);
+  await expect(page.locator('[data-live]')).toBeVisible();
+  const before = await page.evaluate(() => scrollY);
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(600);
+  await expect(page.locator('[data-live]')).toBeVisible();
+  expect(await page.evaluate(() => scrollY)).toBeGreaterThanOrEqual(before);
 });

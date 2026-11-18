@@ -20,7 +20,7 @@ const levels = [
           {l.items.map((x) => (
             <li>
               <a data-lesson-link data-slug={x.id} href={`/lessons/${x.id}`}>
-                <span class="check" aria-hidden="true">✓</span>{x.data.title}
+                <span class="check" aria-hidden="true">✓</span>{x.data.title}<span class="sr-done"> (done)</span>
               </a>
               {x.data.poke && <span class="tag">Try it</span>}
               <p class="summary">{x.data.summary}</p>

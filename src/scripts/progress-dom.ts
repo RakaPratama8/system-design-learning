@@ -41,6 +41,7 @@ export function initProgress(root: Document = document): void {
       b.textContent = on ? 'Done ✓ (click to undo)' : 'Mark as done';
     });
   };
+  root.querySelectorAll<HTMLElement>('[data-mark-done]').forEach((b) => b.removeAttribute('hidden'));
   paint(loadDone(storage));
   root.querySelectorAll<HTMLElement>('[data-mark-done]').forEach((b) => {
     b.addEventListener('click', () => paint(toggleDone(storage, b.dataset.slug ?? '')));

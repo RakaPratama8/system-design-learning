@@ -37,4 +37,11 @@ describe('motion', () => {
     expect(markerT(0.3, false)).toBe(0.3);
     expect(markerT(0.3, true)).toBe(1);
   });
+
+  it('drops the fill when a node goes down (no stale load bar)', () => {
+    const from = { status: 'ok', fill: 0.33 } as const;
+    const to = { status: 'down', label: 'off' } as const;
+    expect(interpolateNodeState(from, to, 1)).toEqual({ status: 'down', label: 'off' });
+    expect(interpolateNodeState(from, to, 0.2).fill).toBe(0.33);
+  });
 });

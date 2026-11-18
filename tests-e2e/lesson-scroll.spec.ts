@@ -1,22 +1,10 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { scrollToBlock } from './helpers';
 import scene from '../src/scenes/http-request-lifecycle';
 
 if (scene.type !== 'graph') throw new Error('expected a graph scene');
 const caps = scene.steps.map((s) => s.caption);
 const URL = '/lessons/http-request-lifecycle';
-
-// Scrolls so the anchor line (middle of the reading area under the sticky pin) sits `frac` of the way down block `i`.
-async function scrollToBlock(page: Page, i: number, frac = 0) {
-  await page.evaluate(
-    ([idx, f]) => {
-      const pin = document.querySelector('.pin') as HTMLElement;
-      const block = document.querySelectorAll('[data-step]')[idx].getBoundingClientRect();
-      const anchor = pin.offsetHeight + (innerHeight - pin.offsetHeight) / 2;
-      window.scrollTo(0, window.scrollY + block.top - anchor + (f as number) * block.height + 1);
-    },
-    [i, frac],
-  );
-}
 
 test('caption follows scroll, both directions', async ({ page }) => {
   await page.goto(URL);
@@ -56,4 +44,24 @@ test('reduced motion jumps the marker to the end; normal motion scrubs it', asyn
   };
   expect(await read('reduce')).toEqual({ cx: '60', cy: '120' });
   expect((await read('no-preference')).cy).not.toBe('120');
+});
+
+test('explanation blocks are numbered by a CSS counter', async ({ page }) => {
+  await page.goto(URL);
+  const rules = await page.locator('[data-step]').first().evaluate((el) => ({
+    increment: getComputedStyle(el).counterIncrement,
+    label: getComputedStyle(el, '::before').content,
+    reset: getComputedStyle(el.closest('.lesson')!).counterReset,
+  }));
+  expect(rules.increment).toContain('step');
+  expect(rules.reset).toContain('step');
+  expect(rules.label).toContain('counter(step)');
+});
+
+test('ArrowUp at the top of the page does not scroll', async ({ page }) => {
+  await page.goto(URL);
+  await expect(page.locator('[data-caption]')).toHaveText(caps[0]);
+  await page.keyboard.press('ArrowUp');
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => scrollY)).toBe(0);
 });

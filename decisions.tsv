@@ -1,1 +1,6 @@
 time	decision	reason	evidence	result
+2026-11-18T09:25	Defer: focus is lost to body when the Try it view swaps in/out	Minor; needs a focus-management design, not worth blocking content work	Checkpoint A review	deferred
+2026-11-18T09:25	Defer: TrafficStream re-renders every frame even with zero dots; all scenes/sims bundled into every lesson page	Minor perf; fine at 29 small modules	Checkpoint A review	deferred
+2026-11-18T09:25	Defer: two rapid arrow presses during smooth scroll can advance one step	Minor; scroll still works	Checkpoint A review	deferred
+2026-11-18T09:25	Accept: diagram stays on step 1 without JavaScript	Spec says text must stay readable without JS; diagram is progressive enhancement	Checkpoint A review	accepted
+2026-11-18T09:25	Node boxes are 72x32 with labels capped at 12 chars and bounds/overlap checked in validateScene	Review found silent layout breakage would be copied into 23 lessons	validate tests	done

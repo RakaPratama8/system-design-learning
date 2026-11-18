@@ -1,12 +1,16 @@
 import type { GraphFrame } from '../../engine/frames/graph';
 
-const W = 64;
+const W = 72;
 const H = 32;
 
 export function GraphSceneView({ frame }: { frame: GraphFrame }) {
   const at = (id: string) => frame.nodes.find((n) => n.id === id)!;
+  const notable = frame.nodes
+    .filter((n) => n.state.status !== 'ok' || n.state.label)
+    .map((n) => `${n.label}: ${n.state.label ?? n.state.status}`)
+    .join('. ');
   return (
-    <svg className="scene" viewBox="0 0 400 200" role="img" aria-label={frame.caption}>
+    <svg className="scene" viewBox="0 0 400 200" role="img" aria-label={notable ? `${frame.caption} ${notable}.` : frame.caption}>
       {frame.edges.map((e) => (
         <line
           key={e.id}

@@ -36,7 +36,7 @@ export function TryItPanel({ sim, values, result, onChange }: Props) {
           </label>
         ),
       )}
-      <dl className="readouts">
+      <dl className="readouts" aria-live="polite">
         {result.readouts.map((r) => (
           <div key={r.label}>
             <dt>{r.label}</dt>

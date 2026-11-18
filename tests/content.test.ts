@@ -24,6 +24,12 @@ describe('lessons', () => {
         expect(scene, 'missing scene').toBeDefined();
         expect(validateScene(scene)).toEqual([]);
       });
+      it('has <TryIt> after the last step if and only if it is a poke lesson', () => {
+        const isPoke = /^poke:\s*true/m.test(text);
+        const tryIt = text.indexOf('<TryIt');
+        expect(tryIt >= 0, 'TryIt present').toBe(isPoke);
+        if (isPoke) expect(tryIt).toBeGreaterThan(text.lastIndexOf('<Step'));
+      });
       it('has one <Step> per scene step', () => {
         const count = (text.match(/<Step\b/g) ?? []).length;
         expect(count).toBe(scenes[slugOf(f)].steps.length);
@@ -42,6 +48,35 @@ describe('lessons', () => {
       for (const slug of poke) expect(sims[slug], `missing sim for ${slug}`).toBeDefined();
       for (const slug of Object.keys(sims)) expect(poke, `sim without poke lesson ${slug}`).toContain(slug);
     });
+    const settings = (sim: (typeof sims)[string]) => {
+      const options = sim.controls.map((c) =>
+        c.kind === 'toggle' ? [true, false] : [...new Set([c.min ?? 0, c.default as number, c.max ?? 0])],
+      );
+      return options.reduce<(number | boolean)[][]>((acc, opts) => acc.flatMap((a) => opts.map((o) => [...a, o])), [[]]);
+    };
+    for (const slug of Object.keys(sims)) {
+      it(`${slug}: every control combination gives sane output`, () => {
+        const sim = sims[slug];
+        const scene = scenes[slug];
+        if (scene.type !== 'graph') return;
+        const ids = new Set(scene.nodes.map((n) => n.id));
+        for (const combo of settings(sim)) {
+          const values = Object.fromEntries(sim.controls.map((c, i) => [c.id, combo[i]]));
+          const r = sim.run(values);
+          const where = JSON.stringify(values);
+          expect(JSON.stringify(r), where).not.toMatch(/NaN|Infinity|null/);
+          for (const [id, st] of Object.entries(r.states)) {
+            expect(ids.has(id), `${where} state ${id}`).toBe(true);
+            if (st.fill !== undefined) expect(st.fill >= 0 && st.fill <= 1, `${where} fill ${id}`).toBe(true);
+          }
+          for (const route of r.routes) {
+            expect(route.weight >= 0, `${where} weight`).toBe(true);
+            for (const id of route.path) expect(ids.has(id), `${where} route node ${id}`).toBe(true);
+          }
+          expect(r.trafficRate >= 0, `${where} trafficRate`).toBe(true);
+        }
+      });
+    }
     for (const slug of poke) {
       it(`${slug}: sim output only references nodes in its graph scene`, () => {
         const scene = scenes[slug];

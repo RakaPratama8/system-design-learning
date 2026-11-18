@@ -19,7 +19,7 @@ const { Content } = await render(entry);
   <p class="summary">{entry.data.summary}</p>
   <div class="pin"><Player slug={entry.id} client:load /></div>
   <article class="lesson"><Content components={{ Step, TryIt }} /></article>
-  <p><button data-mark-done data-slug={entry.id} class="done-btn">Mark as done</button></p>
+  <p><button data-mark-done data-slug={entry.id} class="done-btn" hidden>Mark as done</button></p>
 </Base>
 
 <script>

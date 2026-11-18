@@ -64,13 +64,22 @@ export function Player({ slug }: { slug: string }) {
       const delta = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
       if (!delta) return;
       const list = blocks();
+      if (list.length === 0) return;
       const r = rects();
       const a = anchor();
       const current = computeScroll(r, a);
-      const entered = r.length > 0 && r[0].top <= a;
+      const entered = r[0].top <= a;
       let target: number;
-      if (delta > 0) target = entered ? clampStep(current.step, 1, list.length) : 0;
-      else target = clampStep(current.step, current.progress > 0.05 ? 0 : -1, list.length);
+      if (delta > 0) {
+        if (!entered) target = 0;
+        else if (current.step === list.length - 1) return; // past the last block (e.g. in Try it): leave scrolling to the browser
+        else target = clampStep(current.step, 1, list.length);
+      } else {
+        if (!entered) return; // nothing above the first block
+        if (current.progress > 0.05) target = current.step;
+        else if (current.step === 0) return;
+        else target = clampStep(current.step, -1, list.length);
+      }
       e.preventDefault();
       window.scrollBy({ top: r[target].top - a + 1, behavior: reducedRef.current ? 'auto' : 'smooth' });
     };

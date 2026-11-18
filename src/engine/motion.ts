@@ -6,8 +6,11 @@ export function lerp(a: number, b: number, t: number): number {
 
 export function interpolateNodeState(from: NodeState, to: NodeState, t: number): NodeState {
   const late = t >= 0.5;
+  // A state without a fill (e.g. a node that went down) must not keep the old load bar once it takes over.
   const fill =
-    from.fill !== undefined && to.fill !== undefined ? lerp(from.fill, to.fill, t) : (to.fill ?? from.fill);
+    from.fill !== undefined && to.fill !== undefined
+      ? lerp(from.fill, to.fill, t)
+      : (to.fill ?? (late ? undefined : from.fill));
   const src = late ? to : from;
   const out: NodeState = { status: src.status };
   if (fill !== undefined) out.fill = fill;

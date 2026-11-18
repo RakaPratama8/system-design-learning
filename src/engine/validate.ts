@@ -1,5 +1,10 @@
 import type { GraphBody, GraphStepBody, NodeState, Scene } from './types';
 
+// Keep in sync with the node box drawn in components/scenes/GraphScene.tsx (viewBox 0 0 400 200).
+export const NODE_W = 72;
+export const NODE_H = 32;
+export const LABEL_MAX = 12;
+
 function checkStates(prefix: string, i: number, states: Record<string, NodeState> | undefined, known: Set<string>, errors: string[]) {
   for (const [id, st] of Object.entries(states ?? {})) {
     if (!known.has(id)) errors.push(`${prefix}step ${i}: state for unknown id ${id}`);
@@ -12,7 +17,16 @@ function checkGraph(prefix: string, body: GraphBody, steps: GraphStepBody[], err
   for (const n of body.nodes) {
     if (ids.has(n.id)) errors.push(`${prefix}duplicate node id ${n.id}`);
     ids.add(n.id);
+    if (n.label.length > LABEL_MAX) errors.push(`${prefix}label of ${n.id} is longer than ${LABEL_MAX} characters`);
+    if (n.x < NODE_W / 2 || n.x > 400 - NODE_W / 2 || n.y < 36 || n.y > 184) {
+      errors.push(`${prefix}node ${n.id} is out of bounds (x ${NODE_W / 2}..${400 - NODE_W / 2}, y 36..184)`);
+    }
   }
+  body.nodes.forEach((a, i) => {
+    for (const b of body.nodes.slice(i + 1)) {
+      if (Math.abs(a.x - b.x) < NODE_W && Math.abs(a.y - b.y) < NODE_H) errors.push(`${prefix}nodes ${a.id} and ${b.id} overlap`);
+    }
+  });
   const edgeIds = new Set<string>();
   for (const e of body.edges) {
     for (const end of [e.from, e.to]) if (!ids.has(end)) errors.push(`${prefix}edge ${e.from}>${e.to} references unknown node ${end}`);
@@ -44,6 +58,9 @@ export function validateScene(scene: Scene): string[] {
       break;
     case 'sequence': {
       const lanes = new Set(scene.lanes.map((l) => l.id));
+      for (const l of scene.lanes) {
+        if (l.label.length > LABEL_MAX) errors.push(`label of lane ${l.id} is longer than ${LABEL_MAX} characters`);
+      }
       scene.steps.forEach((s, i) => {
         for (const end of s.message ? [s.message.from, s.message.to] : []) {
           if (!lanes.has(end)) errors.push(`step ${i}: message references unknown lane ${end}`);

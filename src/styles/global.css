@@ -102,3 +102,18 @@ a { color: var(--accent); }
 .readouts dt { color: var(--muted); }
 .readouts dd { margin: 0; font-weight: 600; }
 .tryit { min-height: 45vh; padding-top: 1rem; }
+
+.sr-done { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+[data-lesson-link]:not([data-done]) .sr-done { display: none; }
+
+.lesson { counter-reset: step; }
+.step { counter-increment: step; }
+.step::before {
+  content: 'Step ' counter(step);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}

@@ -4,7 +4,7 @@ const scene: Scene = {
   type: 'graph',
   nodes: [
     { id: 'client', label: 'Clients', x: 50, y: 100 },
-    { id: 'lb', label: 'Load balancer', x: 150, y: 100 },
+    { id: 'lb', label: 'Balancer', x: 150, y: 100 },
     { id: 's1', label: 'Server 1', x: 310, y: 40 },
     { id: 's2', label: 'Server 2', x: 310, y: 100 },
     { id: 's3', label: 'Server 3', x: 310, y: 160 },
@@ -24,7 +24,7 @@ const scene: Scene = {
     },
     {
       caption: 'The next request goes to Server 2, then Server 3: round robin shares the work.',
-      marker: ['lb', 's2'],
+      marker: ['lb', 's2', 'lb', 's3'],
       states: { s2: { status: 'ok', fill: 0.33 }, s3: { status: 'ok', fill: 0.33 } },
     },
     {

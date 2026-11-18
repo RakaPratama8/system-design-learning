@@ -46,6 +46,34 @@ describe('validateScene graph', () => {
   });
 });
 
+describe('validateScene graph layout', () => {
+  it('rejects a node outside the drawable area', () => {
+    const s = graph();
+    s.nodes[0] = { id: 'a', label: 'A', x: 10, y: 100 };
+    expect(validateScene(s).join()).toMatch(/bounds/);
+    s.nodes[0] = { id: 'a', label: 'A', x: 50, y: 5 };
+    expect(validateScene(s).join()).toMatch(/bounds/);
+  });
+  it('rejects overlapping nodes', () => {
+    const s = graph();
+    s.nodes[1] = { id: 'b', label: 'B', x: 80, y: 100 };
+    expect(validateScene(s).join()).toMatch(/overlap/);
+  });
+  it('rejects a label too long for its box', () => {
+    const s = graph();
+    s.nodes[0] = { id: 'a', label: 'Load balancer', x: 50, y: 100 };
+    expect(validateScene(s).join()).toMatch(/label/);
+  });
+  it('rejects a lane label that is too long', () => {
+    const s: SequenceScene = {
+      type: 'sequence',
+      lanes: [{ id: 'c', label: 'A very long lane label' }],
+      steps: [{ caption: 'x' }],
+    };
+    expect(validateScene(s).join()).toMatch(/label/);
+  });
+});
+
 describe('validateScene sequence', () => {
   const seq = (over: Partial<SequenceScene> = {}): SequenceScene => ({
     type: 'sequence',
