@@ -1,6 +1,8 @@
+import { buildCompareFrame } from '../engine/frames/compare';
 import { buildGraphFrame } from '../engine/frames/graph';
 import { buildSequenceFrame } from '../engine/frames/sequence';
 import type { Scene } from '../engine/types';
+import { CompareSceneView } from './scenes/CompareScene';
 import { GraphSceneView } from './scenes/GraphScene';
 import { SequenceSceneView } from './scenes/SequenceScene';
 
@@ -22,6 +24,15 @@ export function SceneView({ scene, step, progress, reduced }: Props) {
       return (
         <>
           <SequenceSceneView frame={frame} />
+          <p data-caption className="caption">{frame.caption}</p>
+        </>
+      );
+    }
+    case 'compare': {
+      const frame = buildCompareFrame(scene, step, progress, reduced);
+      return (
+        <>
+          <CompareSceneView frame={frame} />
           <p data-caption className="caption">{frame.caption}</p>
         </>
       );

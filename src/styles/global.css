@@ -78,3 +78,8 @@ a { color: var(--accent); }
 .seq .msg text { font-size: 10px; fill: var(--text); font-family: var(--font); }
 .seq .msg.on line { stroke: var(--accent); }
 .seq .msg.on polygon { fill: var(--accent); }
+
+.compare { flex: 1; min-height: 0; display: flex; gap: 0.5rem; }
+.compare .side { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.compare h3 { margin: 0; font-size: 0.8rem; text-align: center; color: var(--muted); }
+.compare .scene { flex: 1; min-height: 0; }
