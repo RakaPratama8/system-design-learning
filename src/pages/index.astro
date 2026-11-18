@@ -1,6 +1,38 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+
+const lessons = (await getCollection('lessons')).sort((a, b) => a.data.level - b.data.level || a.data.order - b.data.order);
+const levels = [
+  { level: 1, title: 'Foundations' },
+  { level: 2, title: 'Intermediate' },
+  { level: 3, title: 'Advanced' },
+].map((l) => ({ ...l, items: lessons.filter((x) => x.data.level === l.level) }));
 ---
 <Base title="System Design">
   <h1>System Design</h1>
+  <p class="summary">Learn how systems work by watching them run.</p>
+  {levels.map((l) => (
+    <section class="level">
+      <h2>{l.title}</h2>
+      {l.items.length === 0 ? <p class="summary">Coming soon.</p> : (
+        <ol class="lessons">
+          {l.items.map((x) => (
+            <li>
+              <a data-lesson-link data-slug={x.id} href={`/lessons/${x.id}`}>
+                <span class="check" aria-hidden="true">✓</span>{x.data.title}
+              </a>
+              {x.data.poke && <span class="tag">Try it</span>}
+              <p class="summary">{x.data.summary}</p>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  ))}
 </Base>
+
+<script>
+  import { initProgress } from '../scripts/progress-dom';
+  initProgress(document);
+</script>
