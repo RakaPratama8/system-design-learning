@@ -1,6 +1,8 @@
 import { buildGraphFrame } from '../engine/frames/graph';
+import { buildSequenceFrame } from '../engine/frames/sequence';
 import type { Scene } from '../engine/types';
 import { GraphSceneView } from './scenes/GraphScene';
+import { SequenceSceneView } from './scenes/SequenceScene';
 
 interface Props { scene: Scene; step: number; progress: number; reduced: boolean }
 
@@ -11,6 +13,15 @@ export function SceneView({ scene, step, progress, reduced }: Props) {
       return (
         <>
           <GraphSceneView frame={frame} />
+          <p data-caption className="caption">{frame.caption}</p>
+        </>
+      );
+    }
+    case 'sequence': {
+      const frame = buildSequenceFrame(scene, step, progress, reduced);
+      return (
+        <>
+          <SequenceSceneView frame={frame} />
           <p data-caption className="caption">{frame.caption}</p>
         </>
       );

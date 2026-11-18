@@ -1,5 +1,6 @@
-import { interpolateNodeState, markerT, pointAlong, stateEase } from '../motion';
+import { markerT, pointAlong } from '../motion';
 import type { GraphScene, NodeState, Point } from '../types';
+import { displayedStates } from './shared';
 
 export type GraphBodyWithSteps = Pick<GraphScene, 'nodes' | 'edges' | 'steps'>;
 
@@ -10,20 +11,10 @@ export interface GraphFrame {
   caption: string;
 }
 
-const DEFAULT_STATE: NodeState = { status: 'ok' };
-
-function statesAt(scene: GraphBodyWithSteps, step: number): Record<string, NodeState> {
-  const out: Record<string, NodeState> = {};
-  for (let i = 0; i <= step; i++) Object.assign(out, scene.steps[i]?.states);
-  return out;
-}
-
 export function buildGraphFrame(scene: GraphBodyWithSteps, step: number, progress: number, reduced: boolean): GraphFrame {
   const s = Math.min(scene.steps.length - 1, Math.max(0, step));
   const cur = scene.steps[s];
-  const now = statesAt(scene, s);
-  const before = s === 0 ? {} : statesAt(scene, s - 1);
-  const t = stateEase(progress, reduced);
+  const stateOf = displayedStates(scene.steps, s, progress, reduced);
   const path = cur.marker ?? [];
   const onPath = new Set(path);
   const pathEdges = new Set<string>();
@@ -39,7 +30,7 @@ export function buildGraphFrame(scene: GraphBodyWithSteps, step: number, progres
       label: n.label,
       x: n.x,
       y: n.y,
-      state: interpolateNodeState(before[n.id] ?? DEFAULT_STATE, now[n.id] ?? DEFAULT_STATE, t),
+      state: stateOf(n.id),
       highlighted: highlight.has(n.id) || onPath.has(n.id),
     })),
     edges: scene.edges.map((e) => {
