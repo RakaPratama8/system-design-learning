@@ -1,0 +1,36 @@
+export type NodeStatus = 'ok' | 'hot' | 'down';
+export interface NodeState { status: NodeStatus; fill?: number; label?: string } // fill 0..1
+export interface Point { x: number; y: number }
+export interface GraphNode { id: string; label: string; x: number; y: number } // viewBox 0 0 400 200
+export interface GraphEdge { from: string; to: string } // edge id = `${from}>${to}`
+export interface GraphStep {
+  caption: string;
+  highlight?: string[];
+  marker?: string[];
+  states?: Record<string, NodeState>;
+}
+export interface GraphScene { type: 'graph'; nodes: GraphNode[]; edges: GraphEdge[]; steps: GraphStep[] }
+export interface Lane { id: string; label: string }
+export interface SequenceStep {
+  caption: string;
+  message?: { from: string; to: string; label: string };
+  states?: Record<string, NodeState>;
+}
+export interface SequenceScene { type: 'sequence'; lanes: Lane[]; steps: SequenceStep[] }
+export type GraphBody = Pick<GraphScene, 'nodes' | 'edges'>;
+export type GraphStepBody = Omit<GraphStep, 'caption'>;
+export interface CompareScene {
+  type: 'compare';
+  leftTitle: string;
+  rightTitle: string;
+  left: GraphBody;
+  right: GraphBody;
+  steps: { caption: string; left?: GraphStepBody; right?: GraphStepBody }[];
+}
+export interface NumbersItem { id: string; label: string; unit: string; max: number }
+export interface NumbersScene {
+  type: 'numbers';
+  items: NumbersItem[];
+  steps: { caption: string; values: Record<string, number> }[];
+}
+export type Scene = GraphScene | SequenceScene | CompareScene | NumbersScene;
