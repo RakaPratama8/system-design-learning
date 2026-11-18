@@ -91,6 +91,22 @@ describe('lessons', () => {
   });
 });
 
+// Scenes migrated to icons so far (Tasks 6-8 grow this list; Task 9 checks every scene).
+const ICONIZED = [
+  'client-server', 'dns', 'http-request-lifecycle', 'apis-rest', 'sql-vs-nosql',
+  'scaling-vertical-horizontal', 'load-balancers',
+];
+
+describe('icons', () => {
+  const components = (s: (typeof scenes)[string]) =>
+    s.type === 'graph' ? s.nodes : s.type === 'compare' ? [...s.left.nodes, ...s.right.nodes] : s.type === 'sequence' ? s.lanes : [];
+  for (const slug of ICONIZED) {
+    it(`every node and lane in ${slug} has an icon`, () => {
+      for (const c of components(scenes[slug])) expect(c.icon, `${slug}: ${c.id}`).toBeDefined();
+    });
+  }
+});
+
 describe('curriculum', () => {
   const lessons = files.map((f) => {
     const text = readFileSync(join(dir, f), 'utf8');

@@ -6,10 +6,10 @@ const scene: Scene = {
   rightTitle: 'NoSQL (documents)',
   left: {
     nodes: [
-      { id: 'query', label: 'Query', x: 50, y: 100 },
-      { id: 'orders', label: 'orders', x: 200, y: 50 },
-      { id: 'customers', label: 'customers', x: 200, y: 100 },
-      { id: 'items', label: 'items', x: 200, y: 150 },
+      { id: 'query', label: 'Query', x: 50, y: 100, icon: 'search' },
+      { id: 'orders', label: 'orders', x: 200, y: 44, icon: 'table' },
+      { id: 'customers', label: 'customers', x: 200, y: 100, icon: 'table' },
+      { id: 'items', label: 'items', x: 200, y: 156, icon: 'table' },
     ],
     edges: [
       { from: 'query', to: 'orders' },
@@ -19,8 +19,8 @@ const scene: Scene = {
   },
   right: {
     nodes: [
-      { id: 'query', label: 'Query', x: 50, y: 100 },
-      { id: 'doc', label: 'Order doc', x: 220, y: 100 },
+      { id: 'query', label: 'Query', x: 50, y: 100, icon: 'search' },
+      { id: 'doc', label: 'Order doc', x: 220, y: 100, icon: 'document' },
     ],
     edges: [{ from: 'query', to: 'doc' }],
   },

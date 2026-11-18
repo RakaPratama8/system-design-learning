@@ -6,18 +6,18 @@ const scene: Scene = {
   rightTitle: 'Scale out',
   left: {
     nodes: [
-      { id: 'users', label: 'Users', x: 50, y: 100 },
-      { id: 'server', label: 'Big server', x: 230, y: 100 },
+      { id: 'users', label: 'Users', x: 50, y: 100, icon: 'people' },
+      { id: 'server', label: 'Big server', x: 230, y: 100, icon: 'server' },
     ],
     edges: [{ from: 'users', to: 'server' }],
   },
   right: {
     nodes: [
-      { id: 'users', label: 'Users', x: 40, y: 100 },
-      { id: 'lb', label: 'Balancer', x: 150, y: 100 },
-      { id: 's1', label: 'Server 1', x: 310, y: 50 },
-      { id: 's2', label: 'Server 2', x: 310, y: 100 },
-      { id: 's3', label: 'Server 3', x: 310, y: 150 },
+      { id: 'users', label: 'Users', x: 40, y: 100, icon: 'people' },
+      { id: 'lb', label: 'Balancer', x: 150, y: 100, icon: 'balancer' },
+      { id: 's1', label: 'Server 1', x: 310, y: 44, icon: 'server' },
+      { id: 's2', label: 'Server 2', x: 310, y: 100, icon: 'server' },
+      { id: 's3', label: 'Server 3', x: 310, y: 156, icon: 'server' },
     ],
     edges: [
       { from: 'users', to: 'lb' },

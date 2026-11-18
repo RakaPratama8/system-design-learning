@@ -3,11 +3,11 @@ import type { Scene } from '../engine/types';
 const scene: Scene = {
   type: 'graph',
   nodes: [
-    { id: 'browser', label: 'Browser', x: 50, y: 100 },
-    { id: 'resolver', label: 'Resolver', x: 170, y: 100 },
-    { id: 'root', label: 'Root', x: 320, y: 44 },
-    { id: 'tld', label: '.com server', x: 320, y: 100 },
-    { id: 'auth', label: 'Auth server', x: 320, y: 156 },
+    { id: 'browser', label: 'Browser', x: 50, y: 100, icon: 'browser' },
+    { id: 'resolver', label: 'Resolver', x: 170, y: 100, icon: 'dns' },
+    { id: 'root', label: 'Root', x: 320, y: 44, icon: 'dns' },
+    { id: 'tld', label: '.com server', x: 320, y: 100, icon: 'dns' },
+    { id: 'auth', label: 'Auth server', x: 320, y: 156, icon: 'dns' },
   ],
   edges: [
     { from: 'browser', to: 'resolver' },
