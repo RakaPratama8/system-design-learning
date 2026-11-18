@@ -25,3 +25,22 @@ main { max-width: 680px; margin: 0 auto; padding: 2rem 1rem 6rem; }
 
 h1, h2, h3 { line-height: 1.25; }
 a { color: var(--accent); }
+
+.scene { width: 100%; height: 100%; display: block; }
+.scene .edge { stroke: var(--line); stroke-width: 2; }
+.scene .edge.on { stroke: var(--accent); }
+.scene .node rect:first-child { fill: var(--bg); stroke: var(--text); stroke-width: 1.5; }
+.scene .node.on rect:first-child { fill: var(--accent-soft); stroke: var(--accent); }
+.scene .node text { font-size: 11px; fill: var(--text); font-family: var(--font); }
+.scene .node .sub { font-size: 9px; fill: var(--muted); }
+.scene .node .fill { fill: var(--ok); stroke: none; }
+.scene .node[data-status='hot'] .fill { fill: var(--hot); }
+.scene .node[data-status='hot'] rect:first-child { stroke: var(--hot); }
+.scene .node[data-status='down'] rect:first-child { stroke: var(--down); }
+.scene .node[data-status='down'] text { fill: var(--down); }
+.scene .marker { fill: var(--accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene .edge.on { stroke-dasharray: 6 4; animation: flow 1s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset: -10; } }
+}
