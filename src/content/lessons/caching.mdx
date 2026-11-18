@@ -1,0 +1,43 @@
+---
+title: Caching
+level: 2
+order: 10
+summary: Keep popular answers close so the database does less work.
+poke: true
+---
+
+Many requests ask for the same thing again and again: the home page, a popular product, a user's profile. Asking the database every time is wasteful. A **cache** is a small, fast store that remembers recent answers.
+
+<Step>
+When a request arrives, the app asks the cache first. A cache is usually held in memory, so reading from it takes a fraction of a millisecond. Right now it is empty, so the app finds nothing. That is a **cache miss**.
+</Step>
+
+<Step>
+On a miss the app falls back to the database, the source of truth. The database does the real work, which is slower and uses capacity that is limited, so watch its bar rise. This is the cost the cache exists to avoid.
+</Step>
+
+<Step>
+Before replying, the app **stores the answer in the cache** (a common pattern called cache-aside). The cache fills up a little. The user gets the same answer as they would without a cache; they just may have waited a bit longer this one time.
+</Step>
+
+<Step>
+Now the same data is requested again. The app asks the cache, finds it, and replies immediately. This is a **cache hit**, and the database is not involved at all. If most requests are hits, the database can stay calm even when traffic grows a lot.
+</Step>
+
+<Step>
+Memory is limited, so a cache cannot hold everything. When it is full it must **evict** something, usually the entry used least recently (LRU). A bigger cache keeps more data and gets more hits, but costs more memory.
+</Step>
+
+<Step>
+The number to watch is the **hit rate**: the share of requests answered by the cache. A high hit rate protects the database. There is one catch: cached data can become **stale** when the database changes. Caches handle that by expiring entries after a time limit (a TTL) or by deleting them when the data is updated.
+</Step>
+
+<TryIt>
+Turn the cache off and the database receives every request. Each request that reaches it uses part of its capacity of 100 requests per second in this model. Then turn the cache on and grow it. Notice how the hit rate improves quickly at first and then flattens out.
+</TryIt>
+
+## Key takeaways
+
+- A cache stores recent answers in fast memory so repeated requests skip the slow source.
+- Hit rate is the key measure; a high hit rate lets a small database serve a lot of traffic.
+- Caches must evict old entries when full and must deal with stale data, using expiry or invalidation.
