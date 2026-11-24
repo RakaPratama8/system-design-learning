@@ -26,4 +26,13 @@ describe('initProgress', () => {
     button.click();
     expect(button.getAttribute('aria-pressed')).toBe('false');
   });
+  it('updates the progress meter and marks the first undone lesson as current', () => {
+    document.body.insertAdjacentHTML('beforeend', '<div data-progress><span data-count></span><div class="bar"></div></div>');
+    localStorage.setItem(STORAGE_KEY, '["a"]');
+    initProgress(document);
+    expect(document.querySelector('[data-count]')!.textContent).toBe('1');
+    expect(document.querySelector<HTMLElement>('.bar')!.getAttribute('aria-valuenow')).toBe('1');
+    expect(document.querySelector<HTMLElement>('.bar')!.style.getPropertyValue('--pct')).toBe('50%');
+    expect(document.querySelector('[data-slug="b"]')!.hasAttribute('data-current')).toBe(true);
+  });
 });

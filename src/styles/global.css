@@ -191,3 +191,8 @@ a { color: var(--accent); }
 .back { font-family: var(--mono); font-size: 0.85rem; text-decoration: none; }
 .finish { display: flex; flex-direction: column; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .next { display: flex; flex-direction: column; padding: 1rem 1.25rem; border: 1px solid var(--accent); background: var(--panel); border-radius: 8px; color: var(--text); font-weight: 600; text-decoration: none; }
+
+.meter { margin-top: 1.25rem; }
+.meter .kicker { margin: 0 0 0.4rem; }
+.bar { height: 8px; border-radius: 4px; background: var(--panel); border: 1px solid var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; width: var(--pct, 0%); background: var(--accent); }

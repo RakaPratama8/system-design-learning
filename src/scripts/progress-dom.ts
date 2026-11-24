@@ -40,6 +40,15 @@ export function initProgress(root: Document = document): void {
       el.toggleAttribute('data-current', current && !isDone);
       if (!isDone) current = false;
     });
+    const meter = root.querySelector<HTMLElement>('[data-progress]');
+    if (meter) {
+      const links = [...root.querySelectorAll<HTMLElement>('[data-lesson-link]')];
+      const n = links.filter((el) => el.hasAttribute('data-done')).length;
+      meter.querySelector('[data-count]')!.textContent = String(n);
+      const bar = meter.querySelector<HTMLElement>('.bar')!;
+      bar.setAttribute('aria-valuenow', String(n));
+      bar.style.setProperty('--pct', `${links.length ? (n / links.length) * 100 : 0}%`);
+    }
     root.querySelectorAll<HTMLElement>('[data-mark-done]').forEach((b) => {
       const on = done.has(b.dataset.slug ?? '');
       b.setAttribute('aria-pressed', String(on));

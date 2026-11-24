@@ -15,6 +15,10 @@ let n = 0;
     <p class="kicker">// system design, visual</p>
     <h1>System Design</h1>
     <p class="summary">Learn how systems work by watching them run. Follow the path from the top.</p>
+    <div class="meter" data-progress>
+      <p class="kicker"><span data-count>0</span> / {lessons.length} lessons done</p>
+      <div class="bar" role="progressbar" aria-label="Lessons done" aria-valuemin="0" aria-valuemax={lessons.length} aria-valuenow="0"><span></span></div>
+    </div>
   </header>
   {levels.map((l) => (
     <section class="level">
