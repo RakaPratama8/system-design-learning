@@ -8,22 +8,28 @@ const levels = [
   { level: 2, title: 'Intermediate' },
   { level: 3, title: 'Advanced' },
 ].map((l) => ({ ...l, items: lessons.filter((x) => x.data.level === l.level) }));
+let n = 0;
 ---
 <Base title="System Design">
-  <h1>System Design</h1>
-  <p class="summary">Learn how systems work by watching them run.</p>
+  <header class="hero">
+    <p class="kicker">// system design, visual</p>
+    <h1>System Design</h1>
+    <p class="summary">Learn how systems work by watching them run. Follow the path from the top.</p>
+  </header>
   {levels.map((l) => (
     <section class="level">
-      <h2>{l.title}</h2>
+      <h2><span class="kicker">Level {l.level}</span> {l.title}</h2>
       {l.items.length === 0 ? <p class="summary">Coming soon.</p> : (
-        <ol class="lessons">
+        <ol class="lessons path">
           {l.items.map((x) => (
-            <li>
-              <a data-lesson-link data-slug={x.id} href={`/lessons/${x.id}`}>
-                <span class="check" aria-hidden="true">✓</span>{x.data.title}<span class="sr-done"> (done)</span>
-              </a>
-              {x.data.poke && <span class="tag">Try it</span>}
-              <p class="summary">{x.data.summary}</p>
+            <li class="stop">
+              <span class="pip" aria-hidden="true"><span class="num">{++n}</span><span class="check">✓</span></span>
+              <div>
+                <a data-lesson-link data-slug={x.id} href={`/lessons/${x.id}`}>{x.data.title}<span class="sr-done"> (done)</span></a>
+                <span class="here">Start here</span>
+                {x.data.poke && <span class="tag">Try it</span>}
+                <p class="summary">{x.data.summary}</p>
+              </div>
             </li>
           ))}
         </ol>

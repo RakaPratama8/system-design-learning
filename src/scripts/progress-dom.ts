@@ -32,8 +32,13 @@ function safeStorage(win: Window | null): Pick<Storage, 'getItem' | 'setItem'> {
 export function initProgress(root: Document = document): void {
   const storage = safeStorage(root.defaultView);
   const paint = (done: Set<string>) => {
+    let current = true;
     root.querySelectorAll<HTMLElement>('[data-lesson-link]').forEach((el) => {
-      el.toggleAttribute('data-done', done.has(el.dataset.slug ?? ''));
+      const isDone = done.has(el.dataset.slug ?? '');
+      el.toggleAttribute('data-done', isDone);
+      // first lesson not yet done is the "start here" stop on the path
+      el.toggleAttribute('data-current', current && !isDone);
+      if (!isDone) current = false;
     });
     root.querySelectorAll<HTMLElement>('[data-mark-done]').forEach((b) => {
       const on = done.has(b.dataset.slug ?? '');
