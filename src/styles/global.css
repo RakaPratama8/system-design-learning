@@ -196,3 +196,22 @@ a { color: var(--accent); }
 .meter .kicker { margin: 0 0 0.4rem; }
 .bar { height: 8px; border-radius: 4px; background: var(--panel); border: 1px solid var(--line); overflow: hidden; }
 .bar span { display: block; height: 100%; width: var(--pct, 0%); background: var(--accent); }
+
+.badge { display: none; align-self: flex-start; margin-top: 0.4rem; font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; background: var(--ok); color: var(--on-accent); border-radius: 4px; padding: 0.05rem 0.5rem; }
+.level[data-complete] .badge { display: inline-block; }
+.quiz-stop .ready { display: none; color: var(--hot); }
+.level[data-ready] .quiz-stop .ready { display: block; }
+.level[data-complete] .quiz-stop .pip { background: var(--ok); border-color: var(--ok); color: var(--on-accent); }
+.level[data-complete] .quiz-stop .pip .num { display: none; }
+.level[data-complete] .quiz-stop .pip .check { display: block; }
+
+fieldset[data-q] { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); margin: 0 0 1rem; padding: 0.75rem 1rem 1rem; }
+fieldset[data-q] legend { font-weight: 600; padding: 0 0.4rem; }
+.opt { display: flex; gap: 0.6rem; align-items: center; min-height: 44px; cursor: pointer; }
+.opt input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); }
+fieldset[data-state='right'] { border-color: var(--ok); }
+fieldset[data-state='wrong'] { border-color: var(--down); }
+.fb { margin: 0.5rem 0 0; }
+.fb a { display: block; margin-top: 0.25rem; }
+.done-btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+.result { font-weight: 600; min-height: 1.6em; }

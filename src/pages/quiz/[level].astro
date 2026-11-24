@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { quizzes } from '../../quizzes';
+import { PASS } from '../../engine/quiz';
+
+export function getStaticPaths() {
+  return [1, 2, 3].map((level) => ({ params: { level: String(level) } }));
+}
+
+const level = Number(Astro.params.level);
+const quiz = quizzes[level];
+const titles = Object.fromEntries((await getCollection('lessons')).map((e) => [e.id, e.data.title]));
+const names = ['', 'Foundations', 'Intermediate', 'Advanced'];
+---
+<Base title={`Level ${level} quiz`}>
+  <p><a class="back" href="/">← All lessons</a></p>
+  <p class="kicker">Level {level} · {names[level]}</p>
+  <h1>Level {level} quiz</h1>
+  <p class="summary">{quiz.length} questions. Pass with {PASS}. You can retry as often as you like.</p>
+  <form data-quiz data-level={level} data-pass={PASS} novalidate>
+    {quiz.map((q, i) => (
+      <fieldset data-q data-answer={q.answer}>
+        <legend>{i + 1}. {q.q}</legend>
+        {q.options.map((o, j) => (
+          <label class="opt"><input type="radio" name={`q${i}`} value={j} /> <span>{o}</span></label>
+        ))}
+        <p class="fb" hidden>
+          <strong data-verdict></strong> {q.explain}
+          <a href={`/lessons/${q.lesson}`}>Review: {titles[q.lesson]}</a>
+        </p>
+      </fieldset>
+    ))}
+    <button type="submit" class="done-btn primary">Check answers</button>
+    <p class="result" data-result role="status" aria-live="polite"></p>
+  </form>
+</Base>
+
+<script>
+  import { initQuiz } from '../../scripts/quiz-dom';
+  initQuiz(document);
+</script>

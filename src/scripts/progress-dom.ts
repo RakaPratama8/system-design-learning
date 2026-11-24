@@ -1,7 +1,8 @@
 import { loadDone, toggleDone } from '../engine/progress';
+import { PASS, isLevelComplete, loadBest } from '../engine/quiz';
 
 // localStorage can throw (blocked, private mode); fall back to memory so toggles still work in-page.
-function safeStorage(win: Window | null): Pick<Storage, 'getItem' | 'setItem'> {
+export function safeStorage(win: Window | null): Pick<Storage, 'getItem' | 'setItem'> {
   const memory = new Map<string, string>();
   const real = () => {
     try {
@@ -39,6 +40,16 @@ export function initProgress(root: Document = document): void {
       // first lesson not yet done is the "start here" stop on the path
       el.toggleAttribute('data-current', current && !isDone);
       if (!isDone) current = false;
+    });
+    const best = loadBest(storage);
+    root.querySelectorAll<HTMLElement>('section.level[data-slugs]').forEach((sec) => {
+      const slugs = (sec.dataset.slugs ?? '').split(',').filter(Boolean);
+      const score = best[Number(sec.dataset.level)];
+      const complete = isLevelComplete(done, slugs, score);
+      sec.toggleAttribute('data-complete', complete);
+      sec.toggleAttribute('data-ready', !complete && slugs.every((s) => done.has(s)));
+      const tag = sec.querySelector<HTMLElement>('[data-best]');
+      if (tag) tag.textContent = score === undefined ? 'Not taken' : `Best ${score}/5${score >= PASS ? ' ✓' : ''}`;
     });
     const meter = root.querySelector<HTMLElement>('[data-progress]');
     if (meter) {

@@ -21,8 +21,8 @@ let n = 0;
     </div>
   </header>
   {levels.map((l) => (
-    <section class="level">
-      <h2><span class="kicker">Level {l.level}</span> {l.title}</h2>
+    <section class="level" data-level={l.level} data-slugs={l.items.map((x) => x.id).join(',')}>
+      <h2><span class="kicker">Level {l.level}</span> {l.title}<span class="badge">Level complete</span></h2>
       {l.items.length === 0 ? <p class="summary">Coming soon.</p> : (
         <ol class="lessons path">
           {l.items.map((x) => (
@@ -36,6 +36,15 @@ let n = 0;
               </div>
             </li>
           ))}
+          <li class="stop quiz-stop">
+            <span class="pip" aria-hidden="true"><span class="num">?</span><span class="check">✓</span></span>
+            <div>
+              <a data-quiz-link href={`/quiz/${l.level}`}>Level {l.level} quiz</a>
+              <span class="tag" data-best>Not taken</span>
+              <p class="summary">5 questions, pass with 4. Finish the level by passing it.</p>
+              <p class="summary ready">All lessons done. Pass the quiz to finish this level.</p>
+            </div>
+          </li>
         </ol>
       )}
     </section>
