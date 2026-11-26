@@ -12,21 +12,23 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const all = (await getCollection('lessons')).sort((a, b) => a.data.level - b.data.level || a.data.order - b.data.order);
-const next = all[all.findIndex((x) => x.id === entry.id) + 1];
+const nextRaw = all[all.findIndex((x) => x.id === entry.id) + 1];
+// Last lesson of a level leads to that level's quiz, not the next level's first lesson.
+const next = nextRaw?.data.level === entry.data.level ? nextRaw : undefined;
 const { Content } = await render(entry);
 ---
 <Base title={entry.data.title}>
   <p><a class="back" href="/">← All lessons</a></p>
   <h1>{entry.data.title}</h1>
   <p class="summary">{entry.data.summary}</p>
-  <div class="pin"><Player slug={entry.id} client:load /></div>
+  <div class="pin" translate="no"><Player slug={entry.id} client:load /></div>
   <article class="lesson"><Content components={{ Step, TryIt }} /></article>
   <footer class="finish">
     <button data-mark-done data-slug={entry.id} class="done-btn" hidden>Mark as done</button>
     {next ? (
       <a class="next" href={`/lessons/${next.id}`}><span class="kicker">Next lesson</span>{next.data.title} →</a>
     ) : (
-      <a class="next" href="/"><span class="kicker">All done</span>Back to the path →</a>
+      <a class="next" href={`/quiz/${entry.data.level}`}><span class="kicker">Level {entry.data.level} complete</span>Take the Level {entry.data.level} quiz →</a>
     )}
   </footer>
 </Base>
